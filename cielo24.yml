@@ -266,6 +266,438 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /job/perform_translation:
+    post:
+      operationId: perform_translation
+      tags:
+      - job
+      description: "Request that orders a new Translation language for a video that has been previously Transcribed and/or Translated. The New Job ID and job target language will be returned upon completion."
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      - name: job_id
+        in: query
+        required: true
+        schema:
+          type: string
+          example: 0fbd6015910e42dca25a863c4925d77c
+      - name: target_languages
+        in: query
+        required: true
+        description: The language(s) being ordered (Any RFC 5646 language code) separated by comma (,)
+        schema:
+          type: string
+          example: fr,de
+      - name: approve_uplevel
+        in: query
+        schema:
+          type: string
+          enum: [yes, no, t, f, "true", "false"]
+          example: yes
+      responses:
+        201:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerformTranslationResponse"
+        400:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /job/get_caption:
+    get:
+      operationId: get_caption
+      tags:
+      - job
+      description: "Get the caption file for a job. The job must have completed transcription before a caption can be downloaded."
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      - name: job_id
+        in: query
+        required: true
+        schema:
+          type: string
+          example: 0fbd6015910e42dca25a863c4925d77c
+      - name: caption_format
+        in: query
+        required: true
+        schema:
+          type: string
+          example: SRT
+          enum: [DFXP, ECHO, QT, SAMI, SBV, SCC, SRT, TPM, TRANSCRIPT, TWX, WEB_VTT]
+      - name: build_url
+        in: query
+        description: "Rather than returning the file, return a permanent URL to the file."
+        schema:
+          type: string
+          default: "false"
+          example: "false"
+          enum: ["true", "false"]
+      - name: caption_words_min
+        in: query
+        description: "Minimum number of words allowed in a caption."
+        schema:
+          type: integer
+          default: 1
+          example: 3
+      - name: caption_by_sentence
+        in: query
+        description: "When true, puts each sentence into its own caption. When false, more than one sentence may appear in a single caption."
+        schema:
+          type: string
+          default: "true"
+          example: "false"
+          enum: ["true", "false"]
+      - name: characters_per_caption_line
+        in: query
+        description: "Maximum number of characters to be displayed on each caption line."
+        schema:
+          type: integer
+          default: 42
+          example: 30
+      - name: dfxp_header
+        in: query
+        description: "Allows you to specify a custom header for your DFXP caption file. The header should be the entire contents of the header including the opening and closing tags. Ignored if caption_format does not equal DFXP."
+        schema:
+          type: string
+          default: ""
+          example: <head></head>
+      - name: disallow_dangling
+        in: query
+        description: "Will prevent captions from having the last word in a sentence start a new line. Last words will ALWAYS be kept on the same line, even if it breaks the characters_per_caption_line option."
+        schema:
+          type: string
+          default: "false"
+          example: "true"
+          enum: ["true", "false"]
+      - name: display_effects_speaker_as # TODO: Add possible options
+        in: query
+        description: "Determines what speaker name should used for sound effects."
+        schema:
+          type: string
+          default: Effects
+          example: Sounds
+      - name: display_speaker_id
+        in: query
+        description: 'Determines the way speakers are identified in the captions. Choose "no" to not display speaker identities at all: ">> example" Choose "number" to display only the speaker number: ">> Speaker 1: example" Choose "name" to display the speaker name: ">> John Doe: example". If you choose "name", the speaker number will be displayed if the name is not available.'
+        schema:
+          type: string
+          default: name
+          example: number
+          enum: ["no", number, name]
+      - name: iwp_name
+        in: query
+        description: "The named version of element list to generate the transcript from. If not specified, the transcript will be generated from the latest version."
+        schema:
+          type: string
+          default: ""
+          example: MECHANICAL
+          enum: [PREMIUM, INTERIM_PROFESSIONAL, PROFESSIONAL, SPEAKER_ID, FINAL, MECHANICAL, CUSTOMER_APPROVED_RETURN, CUSTOMER_APPROVED_TRANSLATION]
+      - name: elementlist_version
+        in: query
+        description: "The version of element list to generate the captions from. If not specified, the caption will be generated from the latest version. (ISO 8601 Date String)"
+        schema:
+          type: string
+          default: ""
+          example: "2014-07-31T12:35:52.324389"
+      - name: emit_speaker_change_tokens_as
+        in: query
+        description: "Determine what characters to use to denote speaker changes."
+        schema:
+          type: string
+          default: ">>"
+          example: "-->"
+      - name: force_case
+        in: query
+        description: "Force the contents of the captions to be all UPPER or lower case. If blank, the case of the captions is not changed."
+        schema:
+          type: string
+          default: ""
+          example: lower
+          enum: ["", lower, upper]
+      - name: include_dfxp_metadata
+        in: query
+        description: "When true, and the caption format requested is DFXP, the jobs name, ID and language will be added to the DFXP metadata header. When false, these data are omitted from the header. Ignored if caption_format does not equal DFXP."
+        schema:
+          type: string
+          default: "true"
+          example: "false"
+          enum: ["true", "false"]
+      - name: layout_target_caption_length_ms
+        in: query
+        description: "Captions generated will, on average, be this duration. However, they may vary significantly based on other parameters you set."
+        schema:
+          type: integer
+          default: 5000
+          example: 4000
+      - name: line_break_on_sentence
+        in: query
+        description: "Inserts a line break in between sentences that are in the same caption."
+        schema:
+          type: string
+          default: "false"
+          example: "true"
+          enum: ["true", "false"]
+      - name: line_ending_format
+        in: query
+        description: "Determine the end of line (EOL) character to use for the captions."
+        schema:
+          type: string
+          default: UNIX
+          example: OSX
+          enum: [UNIX, OSX, WINDOWS]
+      - name: lines_per_caption
+        in: query
+        description: "Number of lines to be displayed for each caption."
+        schema:
+          type: integer
+          default: 2
+          example: 3
+      - name: mask_profanity
+        in: query
+        description: "Replace profanity with asterisks."
+        schema:
+          type: string
+          default: "false"
+          example: "true"
+          enum: ["true", "false"]
+      - name: maximum_caption_duration
+        in: query
+        description: "No captions longer than this (in milliseconds) will be produced. If not specified, there is no maximum."
+        schema:
+          type: integer
+          example: 10000
+      - name: merge_gap_interval
+        in: query
+        description: "Captions with a gap between them that is smaller than this (in milliseconds) will have their start and/or end times changed so there is no time gap between the captions."
+        schema:
+          type: integer
+          default: 1000
+          example: 1500
+      - name: minimum_caption_length_ms
+        in: query
+        description: "Extends the duration of short captions to the this minimum length. Additional time is taken from later caption blocks to meet this minimum time."
+        schema:
+          type: integer
+          example: 1500
+      - name: minimum_gap_between_captions_ms
+        in: query
+        description: "Adds a minimum time between captions such as there will always be some time between captions where no text is displayed. When captions are very close together, time will be removed from the caption duration to make the gap."
+        schema:
+          type: integer
+          example: 100
+      - name: qt_seamless
+        in: query
+        description: "Does not put time gaps of any kind between caption blocks. Ignored if caption_format does not equal QT."
+        schema:
+          type: string
+          default: "false"
+          example: "true"
+          enum: ["true", "false"]
+      - name: remove_disfluencies
+        in: query
+        description: 'Remove verbal disfluencies from the generated transcript. Common disfluencies such as "um" and "ah" are removed while maintaining appropriate punctuation.'
+        schema:
+          type: string
+          default: "true"
+          example: "false"
+          enum: ["true", "false"]
+      - name: remove_sounds_list
+        in: query
+        description: 'A list of sounds to not show in the caption. This is a JSON style list, and should look like ["MUSIC", "LAUGH"]. Ignored if remove_sound_references is true.'
+        schema:
+          type: array
+          default: []
+          example: [MUSIC, LAUGH]
+          items:
+            type: string
+            enum: [UNKNOWN, INAUDIBLE, CROSSTALK, MUSIC, NOISE, LAUGH, COUGH, FOREIGN, BLANK_AUDIO, APPLAUSE, BLEEP, ENDS_SENTENCE]
+      - name: remove_sound_references
+        in: query
+        description: "Remove ALL non-verbal sound and noise references from the generated transcript. Sounds and unidentified noises are depicted in the caption as [SOUND], [COUGH] and [NOISE]. If this parameter is set, these identifiers are omitted from the caption."
+        schema:
+          type: string
+          default: "true"
+          example: "false"
+          enum: ["true", "false"]
+      - name: replace_slang
+        in: query
+        description: 'Replace common slang terms from the generated transcript. Common replacements are "want to" for "wanna", "going to" for "gonna", etc.'
+        schema:
+          type: string
+          default: "false"
+          example: "true"
+          enum: ["true", "false"]
+      - name: silence_max_ms
+        in: query
+        description: "If there is a interval of silence in the middle of a sentence longer than this, then the caption will be split."
+        schema:
+          type: integer
+          default: 2000
+          example: 1000
+      - name: single_speaker_per_caption
+        in: query
+        description: "When true, puts each speaker into its own caption. When false, more than one speaker may appear in a single caption."
+        schema:
+          type: string
+          default: "true"
+          example: "false"
+          enum: ["true", "false"]
+      - name: sound_boundaries
+        in: query
+        description: "Specifies the characters to surround sound references with. The default will generate sound references that look like this: [MUSIC]."
+        schema:
+          type: array
+          default: ["[", "]"]
+          example: ["(", ")"]
+          minLength: 2
+          maxLength: 2
+          items:
+            type: string
+      - name: sound_threshold
+        in: query
+        description: "Sound references that are longer than this threshold will be made their own caption entirely, and will not have any text included with them. If not set, Sound references will be included back to back with text no matter the duration of the sound."
+        schema:
+          type: integer
+          example: 5000
+      - name: sound_tokens_by_caption
+        in: query
+        description: "If true, all sound references will always be in their own caption. If false, more than one sound reference may appear in a single caption."
+        schema:
+          type: string
+          default: "false"
+          example: "true"
+          enum: ["true", "false"]
+      - name: sound_tokens_by_line
+        in: query
+        description: "If true, all sound references will always be in their own line. If false, more than one sound reference may appear in a single line."
+        schema:
+          type: string
+          default: "false"
+          example: "true"
+          enum: ["true", "false"]
+      - name: sound_tokens_by_caption_list
+        in: query
+        description: "If non-empty, the specified sound references will always be in their own caption. If empty, more than one sound reference may appear in a single caption. Ignored if sound_tokens_by_caption is true."
+        schema:
+          type: array
+          default: [BLANK_AUDIO, MUSIC]
+          example: []
+          items:
+            type: string
+            enum: [UNKNOWN, INAUDIBLE, CROSSTALK, MUSIC, NOISE, LAUGH, COUGH, FOREIGN, BLANK_AUDIO, APPLAUSE, BLEEP, ENDS_SENTENCE]
+      - name: sound_tokens_by_line_list
+        in: query
+        description: "If non-empty, the specified sound references will always be in their own line. If empty, more than one sound reference may appear in a single line. Ignored if sound_tokens_by_line is true."
+        schema:
+          type: array
+          default: [BLANK_AUDIO, MUSIC]
+          example: [NOISE]
+          items:
+            type: string
+            enum: [UNKNOWN, INAUDIBLE, CROSSTALK, MUSIC, NOISE, LAUGH, COUGH, FOREIGN, BLANK_AUDIO, APPLAUSE, BLEEP, ENDS_SENTENCE]
+      - name: speaker_on_new_line
+        in: query
+        description: "If true, a speaker change will cause a new caption to be made. If false, multiple speakers may appear in a single caption."
+        schema:
+          type: string
+          default: "true"
+          example: "false"
+          enum: ["true", "false"]
+      - name: srt_format
+        in: query
+        description: >
+          If the caption format is SRT, determines what the caption
+          blocks will look like. The default, prints caption blocks
+          that look like this:
+
+            1:
+            00:00:06,060 --> 00:00:16,060
+            This is the caption text.
+
+          You can alter the caption block by re-arranging or removing
+          the substitution string values, shown enclosed in braces "{}"
+          in the default value below. Substitution strings may used
+          more than once if desired. Any text that is not a substitution
+          string will be displayed as written. To add new lines, include
+          a \n. Note, you may need to escape the \n with an extra
+          backslash when encoding the request.
+        schema:
+          type: string
+          default: "{caption_number:d}\\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\\n{caption_text}\\n\\n"
+          example: "{caption_number:d}\\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\\n{caption_text}\\n\\n"
+      - name: strip_square_brackets
+        in: query
+        description: "Removes all square brackets like '[' or ']' from captions. By default square brackets surround sound references like '[MUSIC]', but they may exist as part of the caption text as well."
+        schema:
+          type: string
+          default: "false"
+          example: "true"
+          enum: ["true", "false"]
+      - name: utf8_mark
+        in: query
+        description: "Adds a utf8 bytemark to the beginning of the caption. This should only be used if the system you are loading the caption files into needs a byte marker. The vast majority of systems do not."
+        schema:
+          type: string
+          default: "false"
+          example: "true"
+          enum: ["true", "false"]
+      - name: replace_english_spelling
+        in: query
+        description: >
+          Replaces English spelling with location accurate spelling. i.e. Color --> Colour
+
+
+          A: American
+
+
+          B: British
+
+
+          Z: British ize
+
+
+          U: Australian
+
+
+          C: Canadian
+
+
+        schema:
+          type: string
+          default: A
+          example: B
+          enum: [A,B,Z,U,C]
+      responses:
+        200:
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+            
+        400:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /job/authorize:
     post:
       operationId: authorize_job
@@ -294,7 +726,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-
 components:
   schemas:
     LoginBody:
@@ -391,8 +822,7 @@ components:
           enum: [STANDARD, PRIORITY]
         callback_url:
           type: string
-          description: "A URL with query string which will be called on completion. If submitting the callback_url as a query string parameter, rather than a value in the POST data, the callback_url should be URL encoded. The callback URL can contain tags that will be replaced with job specific data when the callback is called. Below is the list of tags that are supported: {job_id}, {job_name}, {elementlist_version}, {iwp_name} (The Interim Work Product name associated with this
-          ElementList version)"
+          description: "A URL with query string which will be called on completion. If submitting the callback_url as a query string parameter, rather than a value in the POST data, the callback_url should be URL encoded. The callback URL can contain tags that will be replaced with job specific data when the callback is called. Below is the list of tags that are supported: {job_id}, {job_name}, {elementlist_version}, {iwp_name} (The Interim Work Product name associated with this ElementList version)"
           example: http://www.domain.com/path
         options:
           type: string
@@ -411,6 +841,18 @@ components:
       properties:
         TaskId:
           type: string
+    PerformTranslationResponse:
+      type: object
+      properties:
+        translation_job_ids:
+          type: array
+          example:
+          - 0fbd6015910e42dca25a863c4925d77c
+          items:
+            type: string
+        message:
+          type: string
+          example: "Child Translation Created for de. Child Translation already exists for fr"
     JobOptions:
       type: object
       properties:
