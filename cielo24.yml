@@ -217,7 +217,7 @@ paths:
       requestBody:
         required: true
         content:
-          video/*:
+          video/mp4:
             schema:
               type: string
               format: binary

@@ -1,0 +1,15 @@
+.openapi-generator-ignore
+Apis/AccountApi.md
+Apis/JobApi.md
+Models/AddMediaResponse.md
+Models/ErrorResponse.md
+Models/IWPEnum.md
+Models/JobOptions.md
+Models/LoginBody.md
+Models/LoginResponse.md
+Models/NewJobBody.md
+Models/NewJobResponse.md
+Models/PerformTranscriptionBody.md
+Models/PerformTranscriptionResponse.md
+Models/VerifyKeyResponse.md
+README.md

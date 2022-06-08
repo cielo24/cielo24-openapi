@@ -1,7 +1,7 @@
 # Cielo24 OpenApi
 
 ## Documentation
-The OpenApi documentation for Cielo24 can be found at [/docs/index.html](https://htmlpreview.github.io/?https://github.com/cielo24/cielo24_openapi/blob/master/docs/index.html)
+The OpenApi documentation for Cielo24 can be found at [/docs/index.html](doc_md/README.md)
 
 ## Generating client code
 `openapi-generator generate --package-name=cielo24 -i cielo24.yml -g LANGUAGE`

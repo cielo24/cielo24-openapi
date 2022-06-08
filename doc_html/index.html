@@ -885,8 +885,8 @@ ul.nav-tabs {
     "customer_approval_tool" : {
       "type" : "string",
       "description" : "Determines which web based tool to use for viewing, editing and approving jobs.",
-      "enum" : [ "AMARA", "CIELO24" ],
-      "default" : "CIELO24"
+      "default" : "CIELO24",
+      "enum" : [ "AMARA", "CIELO24" ]
     },
     "custom_metadata" : {
       "type" : "object",
@@ -918,32 +918,32 @@ ul.nav-tabs {
     "speaker_id" : {
       "type" : "string",
       "description" : "Requests that speaker names be identified.",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     },
     "audio_description" : {
       "type" : "string",
       "description" : "Requests that all noises and sounds be identified.",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     },
     "on_screen_text" : {
       "type" : "string",
       "description" : "Requests that any text that appears in the media be added to the transcription.",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     },
     "music_lyrics" : {
       "type" : "string",
       "description" : "Requests that lyrics to songs be transcribed instead of labeled [MUSIC].",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     },
     "custom_special_handling" : {
       "type" : "string",
       "description" : "Requests that transcribers follow submitted instruction set.",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     }
   }
 };
@@ -1013,8 +1013,8 @@ ul.nav-tabs {
     "is_duplicate" : {
       "type" : "string",
       "description" : "Allows creating multiple jobs with the same external_id",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     }
   }
 };
@@ -2744,7 +2744,7 @@ pub fn main() {
                             <pre class="prettyprint"><code class="language-bsh">curl -X POST \
  \
  -H "Accept: application/json" \
- -H "Content-Type: video/*" \
+ -H "Content-Type: video/mp4" \
  "https://api.cielo24.com/api/job/add_media?v=56&job_id=0fbd6015910e42dca25a863c4925d77c&is_duplicate=isDuplicate_example" \
  -d ''
 </code></pre>
@@ -3067,7 +3067,7 @@ pub fn main() {
 $(document).ready(function() {
   var schemaWrapper = {
   "content" : {
-    "video/*" : {
+    "video/mp4" : {
       "schema" : {
         "type" : "string",
         "format" : "binary"
