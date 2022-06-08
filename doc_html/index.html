@@ -885,8 +885,8 @@ ul.nav-tabs {
     "customer_approval_tool" : {
       "type" : "string",
       "description" : "Determines which web based tool to use for viewing, editing and approving jobs.",
-      "default" : "CIELO24",
-      "enum" : [ "AMARA", "CIELO24" ]
+      "enum" : [ "AMARA", "CIELO24" ],
+      "default" : "CIELO24"
     },
     "custom_metadata" : {
       "type" : "object",
@@ -918,32 +918,32 @@ ul.nav-tabs {
     "speaker_id" : {
       "type" : "string",
       "description" : "Requests that speaker names be identified.",
-      "default" : "false",
-      "enum" : [ "true", "false" ]
+      "enum" : [ "true", "false" ],
+      "default" : "false"
     },
     "audio_description" : {
       "type" : "string",
       "description" : "Requests that all noises and sounds be identified.",
-      "default" : "false",
-      "enum" : [ "true", "false" ]
+      "enum" : [ "true", "false" ],
+      "default" : "false"
     },
     "on_screen_text" : {
       "type" : "string",
       "description" : "Requests that any text that appears in the media be added to the transcription.",
-      "default" : "false",
-      "enum" : [ "true", "false" ]
+      "enum" : [ "true", "false" ],
+      "default" : "false"
     },
     "music_lyrics" : {
       "type" : "string",
       "description" : "Requests that lyrics to songs be transcribed instead of labeled [MUSIC].",
-      "default" : "false",
-      "enum" : [ "true", "false" ]
+      "enum" : [ "true", "false" ],
+      "default" : "false"
     },
     "custom_special_handling" : {
       "type" : "string",
       "description" : "Requests that transcribers follow submitted instruction set.",
-      "default" : "false",
-      "enum" : [ "true", "false" ]
+      "enum" : [ "true", "false" ],
+      "default" : "false"
     }
   }
 };
@@ -1013,8 +1013,8 @@ ul.nav-tabs {
     "is_duplicate" : {
       "type" : "string",
       "description" : "Allows creating multiple jobs with the same external_id",
-      "default" : "false",
-      "enum" : [ "true", "false" ]
+      "enum" : [ "true", "false" ],
+      "default" : "false"
     }
   }
 };
@@ -1080,6 +1080,22 @@ ul.nav-tabs {
     }
   }
 };
+    defs["PerformTranslationResponse"] = {
+  "type" : "object",
+  "properties" : {
+    "translation_job_ids" : {
+      "type" : "array",
+      "example" : [ "0fbd6015910e42dca25a863c4925d77c" ],
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "message" : {
+      "type" : "string",
+      "example" : "Child Translation Created for de. Child Translation already exists for fr"
+    }
+  }
+};
     defs["VerifyKeyResponse"] = {
   "type" : "object",
   "properties" : {
@@ -1129,11 +1145,17 @@ ul.nav-tabs {
                     <li data-group="Job" data-name="authorizeJob" class="">
                       <a href="#api-Job-authorizeJob">authorizeJob</a>
                     </li>
+                    <li data-group="Job" data-name="getCaption" class="">
+                      <a href="#api-Job-getCaption">getCaption</a>
+                    </li>
                     <li data-group="Job" data-name="newJob" class="">
                       <a href="#api-Job-newJob">newJob</a>
                     </li>
                     <li data-group="Job" data-name="performTranscription" class="">
                       <a href="#api-Job-performTranscription">performTranscription</a>
+                    </li>
+                    <li data-group="Job" data-name="performTranslation" class="">
+                      <a href="#api-Job-performTranslation">performTranslation</a>
                     </li>
           </ul>
         </nav>
@@ -4252,6 +4274,1876 @@ pub fn main() {
                         </article>
                       </div>
                       <hr>
+                    <div id="api-Job-getCaption">
+                      <article id="api-Job-getCaption-0" data-group="User" data-name="getCaption" data-version="0">
+                        <div class="pull-left">
+                          <h1>getCaption</h1>
+                          <p></p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Get the caption file for a job. The job must have completed transcription before a caption can be downloaded.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/job/get_caption</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Job-getCaption-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Job-getCaption-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Job-getCaption-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Job-getCaption-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Job-getCaption-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Job-getCaption-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Job-getCaption-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Job-getCaption-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Job-getCaption-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Job-getCaption-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Job-getCaption-0-python">Python</a></li>
+                          <li class=""><a href="#examples-Job-getCaption-0-rust">Rust</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Job-getCaption-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET \
+ \
+ -H "Accept: text/plain,application/json" \
+ "https://api.cielo24.com/api/job/get_caption?v=56&job_id=0fbd6015910e42dca25a863c4925d77c&caption_format=SRT&build_url=false&caption_words_min=3&caption_by_sentence=false&characters_per_caption_line=30&dfxp_header=<head></head>&disallow_dangling=true&display_effects_speaker_as=Sounds&display_speaker_id=number&iwp_name=MECHANICAL&elementlist_version=2014-07-31T12:35:52.324389&emit_speaker_change_tokens_as=-->&force_case=lower&include_dfxp_metadata=false&layout_target_caption_length_ms=4000&line_break_on_sentence=true&line_ending_format=OSX&lines_per_caption=3&mask_profanity=true&maximum_caption_duration=10000&merge_gap_interval=1500&minimum_caption_length_ms=1500&minimum_gap_between_captions_ms=100&qt_seamless=true&remove_disfluencies=false&remove_sounds_list=["MUSIC","LAUGH"]&remove_sound_references=false&replace_slang=true&silence_max_ms=1000&single_speaker_per_caption=false&sound_boundaries=["(",")"]&sound_threshold=5000&sound_tokens_by_caption=true&sound_tokens_by_line=true&sound_tokens_by_caption_list=[]&sound_tokens_by_line_list=["NOISE"]&speaker_on_new_line=false&srt_format={caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n&strip_square_brackets=true&utf8_mark=true&replace_english_spelling=B"
+</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Job-getCaption-0-java">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
+import org.openapitools.client.auth.*;
+import org.openapitools.client.model.*;
+import org.openapitools.client.api.JobApi;
+
+import java.io.File;
+import java.util.*;
+
+public class JobApiExample {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure API key authorization: ApiKeyAuth
+        ApiKeyAuth ApiKeyAuth = (ApiKeyAuth) defaultClient.getAuthentication("ApiKeyAuth");
+        ApiKeyAuth.setApiKey("YOUR API KEY");
+        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+        //ApiKeyAuth.setApiKeyPrefix("Token");
+
+        // Create an instance of the API class
+        JobApi apiInstance = new JobApi();
+        Integer v = 56; // Integer | 
+        String jobId = 0fbd6015910e42dca25a863c4925d77c; // String | 
+        String captionFormat = SRT; // String | 
+        String buildUrl = false; // String | Rather than returning the file, return a permanent URL to the file.
+        Integer captionWordsMin = 3; // Integer | Minimum number of words allowed in a caption.
+        String captionBySentence = false; // String | When true, puts each sentence into its own caption. When false, more than one sentence may appear in a single caption.
+        Integer charactersPerCaptionLine = 30; // Integer | Maximum number of characters to be displayed on each caption line.
+        String dfxpHeader = <head></head>; // String | Allows you to specify a custom header for your DFXP caption file. The header should be the entire contents of the header including the opening and closing tags. Ignored if caption_format does not equal DFXP.
+        String disallowDangling = true; // String | Will prevent captions from having the last word in a sentence start a new line. Last words will ALWAYS be kept on the same line, even if it breaks the characters_per_caption_line option.
+        String displayEffectsSpeakerAs = Sounds; // String | Determines what speaker name should used for sound effects.
+        String displaySpeakerId = number; // String | Determines the way speakers are identified in the captions. Choose "no" to not display speaker identities at all: ">> example" Choose "number" to display only the speaker number: ">> Speaker 1: example" Choose "name" to display the speaker name: ">> John Doe: example". If you choose "name", the speaker number will be displayed if the name is not available.
+        String iwpName = MECHANICAL; // String | The named version of element list to generate the transcript from. If not specified, the transcript will be generated from the latest version.
+        String elementlistVersion = 2014-07-31T12:35:52.324389; // String | The version of element list to generate the captions from. If not specified, the caption will be generated from the latest version. (ISO 8601 Date String)
+        String emitSpeakerChangeTokensAs = -->; // String | Determine what characters to use to denote speaker changes.
+        String forceCase = lower; // String | Force the contents of the captions to be all UPPER or lower case. If blank, the case of the captions is not changed.
+        String includeDfxpMetadata = false; // String | When true, and the caption format requested is DFXP, the jobs name, ID and language will be added to the DFXP metadata header. When false, these data are omitted from the header. Ignored if caption_format does not equal DFXP.
+        Integer layoutTargetCaptionLengthMs = 4000; // Integer | Captions generated will, on average, be this duration. However, they may vary significantly based on other parameters you set.
+        String lineBreakOnSentence = true; // String | Inserts a line break in between sentences that are in the same caption.
+        String lineEndingFormat = OSX; // String | Determine the end of line (EOL) character to use for the captions.
+        Integer linesPerCaption = 3; // Integer | Number of lines to be displayed for each caption.
+        String maskProfanity = true; // String | Replace profanity with asterisks.
+        Integer maximumCaptionDuration = 10000; // Integer | No captions longer than this (in milliseconds) will be produced. If not specified, there is no maximum.
+        Integer mergeGapInterval = 1500; // Integer | Captions with a gap between them that is smaller than this (in milliseconds) will have their start and/or end times changed so there is no time gap between the captions.
+        Integer minimumCaptionLengthMs = 1500; // Integer | Extends the duration of short captions to the this minimum length. Additional time is taken from later caption blocks to meet this minimum time.
+        Integer minimumGapBetweenCaptionsMs = 100; // Integer | Adds a minimum time between captions such as there will always be some time between captions where no text is displayed. When captions are very close together, time will be removed from the caption duration to make the gap.
+        String qtSeamless = true; // String | Does not put time gaps of any kind between caption blocks. Ignored if caption_format does not equal QT.
+        String removeDisfluencies = false; // String | Remove verbal disfluencies from the generated transcript. Common disfluencies such as "um" and "ah" are removed while maintaining appropriate punctuation.
+        array[String] removeSoundsList = ["MUSIC","LAUGH"]; // array[String] | A list of sounds to not show in the caption. This is a JSON style list, and should look like ["MUSIC", "LAUGH"]. Ignored if remove_sound_references is true.
+        String removeSoundReferences = false; // String | Remove ALL non-verbal sound and noise references from the generated transcript. Sounds and unidentified noises are depicted in the caption as [SOUND], [COUGH] and [NOISE]. If this parameter is set, these identifiers are omitted from the caption.
+        String replaceSlang = true; // String | Replace common slang terms from the generated transcript. Common replacements are "want to" for "wanna", "going to" for "gonna", etc.
+        Integer silenceMaxMs = 1000; // Integer | If there is a interval of silence in the middle of a sentence longer than this, then the caption will be split.
+        String singleSpeakerPerCaption = false; // String | When true, puts each speaker into its own caption. When false, more than one speaker may appear in a single caption.
+        array[String] soundBoundaries = ["(",")"]; // array[String] | Specifies the characters to surround sound references with. The default will generate sound references that look like this: [MUSIC].
+        Integer soundThreshold = 5000; // Integer | Sound references that are longer than this threshold will be made their own caption entirely, and will not have any text included with them. If not set, Sound references will be included back to back with text no matter the duration of the sound.
+        String soundTokensByCaption = true; // String | If true, all sound references will always be in their own caption. If false, more than one sound reference may appear in a single caption.
+        String soundTokensByLine = true; // String | If true, all sound references will always be in their own line. If false, more than one sound reference may appear in a single line.
+        array[String] soundTokensByCaptionList = []; // array[String] | If non-empty, the specified sound references will always be in their own caption. If empty, more than one sound reference may appear in a single caption. Ignored if sound_tokens_by_caption is true.
+        array[String] soundTokensByLineList = ["NOISE"]; // array[String] | If non-empty, the specified sound references will always be in their own line. If empty, more than one sound reference may appear in a single line. Ignored if sound_tokens_by_line is true.
+        String speakerOnNewLine = false; // String | If true, a speaker change will cause a new caption to be made. If false, multiple speakers may appear in a single caption.
+        String srtFormat = {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n; // String | If the caption format is SRT, determines what the caption blocks will look like. The default, prints caption blocks that look like this:
+
+  1:
+  00:00:06,060 --> 00:00:16,060
+  This is the caption text.
+
+You can alter the caption block by re-arranging or removing the substitution string values, shown enclosed in braces "{}" in the default value below. Substitution strings may used more than once if desired. Any text that is not a substitution string will be displayed as written. To add new lines, include a \n. Note, you may need to escape the \n with an extra backslash when encoding the request.
+
+        String stripSquareBrackets = true; // String | Removes all square brackets like '[' or ']' from captions. By default square brackets surround sound references like '[MUSIC]', but they may exist as part of the caption text as well.
+        String utf8Mark = true; // String | Adds a utf8 bytemark to the beginning of the caption. This should only be used if the system you are loading the caption files into needs a byte marker. The vast majority of systems do not.
+        String replaceEnglishSpelling = B; // String | Replaces English spelling with location accurate spelling. i.e. Color --> Colour
+
+A: American
+
+B: British
+
+Z: British ize
+
+U: Australian
+
+C: Canadian
+
+
+        try {
+            'String' result = apiInstance.getCaption(v, jobId, captionFormat, buildUrl, captionWordsMin, captionBySentence, charactersPerCaptionLine, dfxpHeader, disallowDangling, displayEffectsSpeakerAs, displaySpeakerId, iwpName, elementlistVersion, emitSpeakerChangeTokensAs, forceCase, includeDfxpMetadata, layoutTargetCaptionLengthMs, lineBreakOnSentence, lineEndingFormat, linesPerCaption, maskProfanity, maximumCaptionDuration, mergeGapInterval, minimumCaptionLengthMs, minimumGapBetweenCaptionsMs, qtSeamless, removeDisfluencies, removeSoundsList, removeSoundReferences, replaceSlang, silenceMaxMs, singleSpeakerPerCaption, soundBoundaries, soundThreshold, soundTokensByCaption, soundTokensByLine, soundTokensByCaptionList, soundTokensByLineList, speakerOnNewLine, srtFormat, stripSquareBrackets, utf8Mark, replaceEnglishSpelling);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling JobApi#getCaption");
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Job-getCaption-0-android">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.api.JobApi;
+
+public class JobApiExample {
+    public static void main(String[] args) {
+        JobApi apiInstance = new JobApi();
+        Integer v = 56; // Integer | 
+        String jobId = 0fbd6015910e42dca25a863c4925d77c; // String | 
+        String captionFormat = SRT; // String | 
+        String buildUrl = false; // String | Rather than returning the file, return a permanent URL to the file.
+        Integer captionWordsMin = 3; // Integer | Minimum number of words allowed in a caption.
+        String captionBySentence = false; // String | When true, puts each sentence into its own caption. When false, more than one sentence may appear in a single caption.
+        Integer charactersPerCaptionLine = 30; // Integer | Maximum number of characters to be displayed on each caption line.
+        String dfxpHeader = <head></head>; // String | Allows you to specify a custom header for your DFXP caption file. The header should be the entire contents of the header including the opening and closing tags. Ignored if caption_format does not equal DFXP.
+        String disallowDangling = true; // String | Will prevent captions from having the last word in a sentence start a new line. Last words will ALWAYS be kept on the same line, even if it breaks the characters_per_caption_line option.
+        String displayEffectsSpeakerAs = Sounds; // String | Determines what speaker name should used for sound effects.
+        String displaySpeakerId = number; // String | Determines the way speakers are identified in the captions. Choose "no" to not display speaker identities at all: ">> example" Choose "number" to display only the speaker number: ">> Speaker 1: example" Choose "name" to display the speaker name: ">> John Doe: example". If you choose "name", the speaker number will be displayed if the name is not available.
+        String iwpName = MECHANICAL; // String | The named version of element list to generate the transcript from. If not specified, the transcript will be generated from the latest version.
+        String elementlistVersion = 2014-07-31T12:35:52.324389; // String | The version of element list to generate the captions from. If not specified, the caption will be generated from the latest version. (ISO 8601 Date String)
+        String emitSpeakerChangeTokensAs = -->; // String | Determine what characters to use to denote speaker changes.
+        String forceCase = lower; // String | Force the contents of the captions to be all UPPER or lower case. If blank, the case of the captions is not changed.
+        String includeDfxpMetadata = false; // String | When true, and the caption format requested is DFXP, the jobs name, ID and language will be added to the DFXP metadata header. When false, these data are omitted from the header. Ignored if caption_format does not equal DFXP.
+        Integer layoutTargetCaptionLengthMs = 4000; // Integer | Captions generated will, on average, be this duration. However, they may vary significantly based on other parameters you set.
+        String lineBreakOnSentence = true; // String | Inserts a line break in between sentences that are in the same caption.
+        String lineEndingFormat = OSX; // String | Determine the end of line (EOL) character to use for the captions.
+        Integer linesPerCaption = 3; // Integer | Number of lines to be displayed for each caption.
+        String maskProfanity = true; // String | Replace profanity with asterisks.
+        Integer maximumCaptionDuration = 10000; // Integer | No captions longer than this (in milliseconds) will be produced. If not specified, there is no maximum.
+        Integer mergeGapInterval = 1500; // Integer | Captions with a gap between them that is smaller than this (in milliseconds) will have their start and/or end times changed so there is no time gap between the captions.
+        Integer minimumCaptionLengthMs = 1500; // Integer | Extends the duration of short captions to the this minimum length. Additional time is taken from later caption blocks to meet this minimum time.
+        Integer minimumGapBetweenCaptionsMs = 100; // Integer | Adds a minimum time between captions such as there will always be some time between captions where no text is displayed. When captions are very close together, time will be removed from the caption duration to make the gap.
+        String qtSeamless = true; // String | Does not put time gaps of any kind between caption blocks. Ignored if caption_format does not equal QT.
+        String removeDisfluencies = false; // String | Remove verbal disfluencies from the generated transcript. Common disfluencies such as "um" and "ah" are removed while maintaining appropriate punctuation.
+        array[String] removeSoundsList = ["MUSIC","LAUGH"]; // array[String] | A list of sounds to not show in the caption. This is a JSON style list, and should look like ["MUSIC", "LAUGH"]. Ignored if remove_sound_references is true.
+        String removeSoundReferences = false; // String | Remove ALL non-verbal sound and noise references from the generated transcript. Sounds and unidentified noises are depicted in the caption as [SOUND], [COUGH] and [NOISE]. If this parameter is set, these identifiers are omitted from the caption.
+        String replaceSlang = true; // String | Replace common slang terms from the generated transcript. Common replacements are "want to" for "wanna", "going to" for "gonna", etc.
+        Integer silenceMaxMs = 1000; // Integer | If there is a interval of silence in the middle of a sentence longer than this, then the caption will be split.
+        String singleSpeakerPerCaption = false; // String | When true, puts each speaker into its own caption. When false, more than one speaker may appear in a single caption.
+        array[String] soundBoundaries = ["(",")"]; // array[String] | Specifies the characters to surround sound references with. The default will generate sound references that look like this: [MUSIC].
+        Integer soundThreshold = 5000; // Integer | Sound references that are longer than this threshold will be made their own caption entirely, and will not have any text included with them. If not set, Sound references will be included back to back with text no matter the duration of the sound.
+        String soundTokensByCaption = true; // String | If true, all sound references will always be in their own caption. If false, more than one sound reference may appear in a single caption.
+        String soundTokensByLine = true; // String | If true, all sound references will always be in their own line. If false, more than one sound reference may appear in a single line.
+        array[String] soundTokensByCaptionList = []; // array[String] | If non-empty, the specified sound references will always be in their own caption. If empty, more than one sound reference may appear in a single caption. Ignored if sound_tokens_by_caption is true.
+        array[String] soundTokensByLineList = ["NOISE"]; // array[String] | If non-empty, the specified sound references will always be in their own line. If empty, more than one sound reference may appear in a single line. Ignored if sound_tokens_by_line is true.
+        String speakerOnNewLine = false; // String | If true, a speaker change will cause a new caption to be made. If false, multiple speakers may appear in a single caption.
+        String srtFormat = {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n; // String | If the caption format is SRT, determines what the caption blocks will look like. The default, prints caption blocks that look like this:
+
+  1:
+  00:00:06,060 --> 00:00:16,060
+  This is the caption text.
+
+You can alter the caption block by re-arranging or removing the substitution string values, shown enclosed in braces "{}" in the default value below. Substitution strings may used more than once if desired. Any text that is not a substitution string will be displayed as written. To add new lines, include a \n. Note, you may need to escape the \n with an extra backslash when encoding the request.
+
+        String stripSquareBrackets = true; // String | Removes all square brackets like '[' or ']' from captions. By default square brackets surround sound references like '[MUSIC]', but they may exist as part of the caption text as well.
+        String utf8Mark = true; // String | Adds a utf8 bytemark to the beginning of the caption. This should only be used if the system you are loading the caption files into needs a byte marker. The vast majority of systems do not.
+        String replaceEnglishSpelling = B; // String | Replaces English spelling with location accurate spelling. i.e. Color --> Colour
+
+A: American
+
+B: British
+
+Z: British ize
+
+U: Australian
+
+C: Canadian
+
+
+        try {
+            'String' result = apiInstance.getCaption(v, jobId, captionFormat, buildUrl, captionWordsMin, captionBySentence, charactersPerCaptionLine, dfxpHeader, disallowDangling, displayEffectsSpeakerAs, displaySpeakerId, iwpName, elementlistVersion, emitSpeakerChangeTokensAs, forceCase, includeDfxpMetadata, layoutTargetCaptionLengthMs, lineBreakOnSentence, lineEndingFormat, linesPerCaption, maskProfanity, maximumCaptionDuration, mergeGapInterval, minimumCaptionLengthMs, minimumGapBetweenCaptionsMs, qtSeamless, removeDisfluencies, removeSoundsList, removeSoundReferences, replaceSlang, silenceMaxMs, singleSpeakerPerCaption, soundBoundaries, soundThreshold, soundTokensByCaption, soundTokensByLine, soundTokensByCaptionList, soundTokensByLineList, speakerOnNewLine, srtFormat, stripSquareBrackets, utf8Mark, replaceEnglishSpelling);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling JobApi#getCaption");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Job-getCaption-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Job-getCaption-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure API key authorization: (authentication scheme: ApiKeyAuth)
+[apiConfig setApiKey:@"YOUR_API_KEY" forApiKeyIdentifier:@"api_token"];
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+//[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"api_token"];
+
+
+// Create an instance of the API class
+JobApi *apiInstance = [[JobApi alloc] init];
+Integer *v = 56; //  (default to 1)
+String *jobId = 0fbd6015910e42dca25a863c4925d77c; //  (default to null)
+String *captionFormat = SRT; //  (default to null)
+String *buildUrl = false; // Rather than returning the file, return a permanent URL to the file. (optional) (default to false)
+Integer *captionWordsMin = 3; // Minimum number of words allowed in a caption. (optional) (default to 1)
+String *captionBySentence = false; // When true, puts each sentence into its own caption. When false, more than one sentence may appear in a single caption. (optional) (default to true)
+Integer *charactersPerCaptionLine = 30; // Maximum number of characters to be displayed on each caption line. (optional) (default to 42)
+String *dfxpHeader = <head></head>; // Allows you to specify a custom header for your DFXP caption file. The header should be the entire contents of the header including the opening and closing tags. Ignored if caption_format does not equal DFXP. (optional) (default to )
+String *disallowDangling = true; // Will prevent captions from having the last word in a sentence start a new line. Last words will ALWAYS be kept on the same line, even if it breaks the characters_per_caption_line option. (optional) (default to false)
+String *displayEffectsSpeakerAs = Sounds; // Determines what speaker name should used for sound effects. (optional) (default to Effects)
+String *displaySpeakerId = number; // Determines the way speakers are identified in the captions. Choose "no" to not display speaker identities at all: ">> example" Choose "number" to display only the speaker number: ">> Speaker 1: example" Choose "name" to display the speaker name: ">> John Doe: example". If you choose "name", the speaker number will be displayed if the name is not available. (optional) (default to name)
+String *iwpName = MECHANICAL; // The named version of element list to generate the transcript from. If not specified, the transcript will be generated from the latest version. (optional) (default to )
+String *elementlistVersion = 2014-07-31T12:35:52.324389; // The version of element list to generate the captions from. If not specified, the caption will be generated from the latest version. (ISO 8601 Date String) (optional) (default to )
+String *emitSpeakerChangeTokensAs = -->; // Determine what characters to use to denote speaker changes. (optional) (default to >>)
+String *forceCase = lower; // Force the contents of the captions to be all UPPER or lower case. If blank, the case of the captions is not changed. (optional) (default to )
+String *includeDfxpMetadata = false; // When true, and the caption format requested is DFXP, the jobs name, ID and language will be added to the DFXP metadata header. When false, these data are omitted from the header. Ignored if caption_format does not equal DFXP. (optional) (default to true)
+Integer *layoutTargetCaptionLengthMs = 4000; // Captions generated will, on average, be this duration. However, they may vary significantly based on other parameters you set. (optional) (default to 5000)
+String *lineBreakOnSentence = true; // Inserts a line break in between sentences that are in the same caption. (optional) (default to false)
+String *lineEndingFormat = OSX; // Determine the end of line (EOL) character to use for the captions. (optional) (default to UNIX)
+Integer *linesPerCaption = 3; // Number of lines to be displayed for each caption. (optional) (default to 2)
+String *maskProfanity = true; // Replace profanity with asterisks. (optional) (default to false)
+Integer *maximumCaptionDuration = 10000; // No captions longer than this (in milliseconds) will be produced. If not specified, there is no maximum. (optional) (default to null)
+Integer *mergeGapInterval = 1500; // Captions with a gap between them that is smaller than this (in milliseconds) will have their start and/or end times changed so there is no time gap between the captions. (optional) (default to 1000)
+Integer *minimumCaptionLengthMs = 1500; // Extends the duration of short captions to the this minimum length. Additional time is taken from later caption blocks to meet this minimum time. (optional) (default to null)
+Integer *minimumGapBetweenCaptionsMs = 100; // Adds a minimum time between captions such as there will always be some time between captions where no text is displayed. When captions are very close together, time will be removed from the caption duration to make the gap. (optional) (default to null)
+String *qtSeamless = true; // Does not put time gaps of any kind between caption blocks. Ignored if caption_format does not equal QT. (optional) (default to false)
+String *removeDisfluencies = false; // Remove verbal disfluencies from the generated transcript. Common disfluencies such as "um" and "ah" are removed while maintaining appropriate punctuation. (optional) (default to true)
+array[String] *removeSoundsList = ["MUSIC","LAUGH"]; // A list of sounds to not show in the caption. This is a JSON style list, and should look like ["MUSIC", "LAUGH"]. Ignored if remove_sound_references is true. (optional) (default to [])
+String *removeSoundReferences = false; // Remove ALL non-verbal sound and noise references from the generated transcript. Sounds and unidentified noises are depicted in the caption as [SOUND], [COUGH] and [NOISE]. If this parameter is set, these identifiers are omitted from the caption. (optional) (default to true)
+String *replaceSlang = true; // Replace common slang terms from the generated transcript. Common replacements are "want to" for "wanna", "going to" for "gonna", etc. (optional) (default to false)
+Integer *silenceMaxMs = 1000; // If there is a interval of silence in the middle of a sentence longer than this, then the caption will be split. (optional) (default to 2000)
+String *singleSpeakerPerCaption = false; // When true, puts each speaker into its own caption. When false, more than one speaker may appear in a single caption. (optional) (default to true)
+array[String] *soundBoundaries = ["(",")"]; // Specifies the characters to surround sound references with. The default will generate sound references that look like this: [MUSIC]. (optional) (default to ["[","]"])
+Integer *soundThreshold = 5000; // Sound references that are longer than this threshold will be made their own caption entirely, and will not have any text included with them. If not set, Sound references will be included back to back with text no matter the duration of the sound. (optional) (default to null)
+String *soundTokensByCaption = true; // If true, all sound references will always be in their own caption. If false, more than one sound reference may appear in a single caption. (optional) (default to false)
+String *soundTokensByLine = true; // If true, all sound references will always be in their own line. If false, more than one sound reference may appear in a single line. (optional) (default to false)
+array[String] *soundTokensByCaptionList = []; // If non-empty, the specified sound references will always be in their own caption. If empty, more than one sound reference may appear in a single caption. Ignored if sound_tokens_by_caption is true. (optional) (default to ["BLANK_AUDIO","MUSIC"])
+array[String] *soundTokensByLineList = ["NOISE"]; // If non-empty, the specified sound references will always be in their own line. If empty, more than one sound reference may appear in a single line. Ignored if sound_tokens_by_line is true. (optional) (default to ["BLANK_AUDIO","MUSIC"])
+String *speakerOnNewLine = false; // If true, a speaker change will cause a new caption to be made. If false, multiple speakers may appear in a single caption. (optional) (default to true)
+String *srtFormat = {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n; // If the caption format is SRT, determines what the caption blocks will look like. The default, prints caption blocks that look like this:
+
+  1:
+  00:00:06,060 --> 00:00:16,060
+  This is the caption text.
+
+You can alter the caption block by re-arranging or removing the substitution string values, shown enclosed in braces "{}" in the default value below. Substitution strings may used more than once if desired. Any text that is not a substitution string will be displayed as written. To add new lines, include a \n. Note, you may need to escape the \n with an extra backslash when encoding the request.
+ (optional) (default to {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n)
+String *stripSquareBrackets = true; // Removes all square brackets like '[' or ']' from captions. By default square brackets surround sound references like '[MUSIC]', but they may exist as part of the caption text as well. (optional) (default to false)
+String *utf8Mark = true; // Adds a utf8 bytemark to the beginning of the caption. This should only be used if the system you are loading the caption files into needs a byte marker. The vast majority of systems do not. (optional) (default to false)
+String *replaceEnglishSpelling = B; // Replaces English spelling with location accurate spelling. i.e. Color --> Colour
+
+A: American
+
+B: British
+
+Z: British ize
+
+U: Australian
+
+C: Canadian
+ (optional) (default to A)
+
+[apiInstance getCaptionWith:v
+    jobId:jobId
+    captionFormat:captionFormat
+    buildUrl:buildUrl
+    captionWordsMin:captionWordsMin
+    captionBySentence:captionBySentence
+    charactersPerCaptionLine:charactersPerCaptionLine
+    dfxpHeader:dfxpHeader
+    disallowDangling:disallowDangling
+    displayEffectsSpeakerAs:displayEffectsSpeakerAs
+    displaySpeakerId:displaySpeakerId
+    iwpName:iwpName
+    elementlistVersion:elementlistVersion
+    emitSpeakerChangeTokensAs:emitSpeakerChangeTokensAs
+    forceCase:forceCase
+    includeDfxpMetadata:includeDfxpMetadata
+    layoutTargetCaptionLengthMs:layoutTargetCaptionLengthMs
+    lineBreakOnSentence:lineBreakOnSentence
+    lineEndingFormat:lineEndingFormat
+    linesPerCaption:linesPerCaption
+    maskProfanity:maskProfanity
+    maximumCaptionDuration:maximumCaptionDuration
+    mergeGapInterval:mergeGapInterval
+    minimumCaptionLengthMs:minimumCaptionLengthMs
+    minimumGapBetweenCaptionsMs:minimumGapBetweenCaptionsMs
+    qtSeamless:qtSeamless
+    removeDisfluencies:removeDisfluencies
+    removeSoundsList:removeSoundsList
+    removeSoundReferences:removeSoundReferences
+    replaceSlang:replaceSlang
+    silenceMaxMs:silenceMaxMs
+    singleSpeakerPerCaption:singleSpeakerPerCaption
+    soundBoundaries:soundBoundaries
+    soundThreshold:soundThreshold
+    soundTokensByCaption:soundTokensByCaption
+    soundTokensByLine:soundTokensByLine
+    soundTokensByCaptionList:soundTokensByCaptionList
+    soundTokensByLineList:soundTokensByLineList
+    speakerOnNewLine:speakerOnNewLine
+    srtFormat:srtFormat
+    stripSquareBrackets:stripSquareBrackets
+    utf8Mark:utf8Mark
+    replaceEnglishSpelling:replaceEnglishSpelling
+              completionHandler: ^('String' output, NSError* error) {
+    if (output) {
+        NSLog(@"%@", output);
+    }
+    if (error) {
+        NSLog(@"Error: %@", error);
+    }
+}];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-getCaption-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var Cielo24 = require('cielo24');
+var defaultClient = Cielo24.ApiClient.instance;
+
+// Configure API key authorization: ApiKeyAuth
+var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
+ApiKeyAuth.apiKey = "YOUR API KEY";
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//ApiKeyAuth.apiKeyPrefix['api_token'] = "Token";
+
+// Create an instance of the API class
+var api = new Cielo24.JobApi()
+var v = 56; // {Integer} 
+var jobId = 0fbd6015910e42dca25a863c4925d77c; // {String} 
+var captionFormat = SRT; // {String} 
+var opts = {
+  'buildUrl': false, // {String} Rather than returning the file, return a permanent URL to the file.
+  'captionWordsMin': 3, // {Integer} Minimum number of words allowed in a caption.
+  'captionBySentence': false, // {String} When true, puts each sentence into its own caption. When false, more than one sentence may appear in a single caption.
+  'charactersPerCaptionLine': 30, // {Integer} Maximum number of characters to be displayed on each caption line.
+  'dfxpHeader': <head></head>, // {String} Allows you to specify a custom header for your DFXP caption file. The header should be the entire contents of the header including the opening and closing tags. Ignored if caption_format does not equal DFXP.
+  'disallowDangling': true, // {String} Will prevent captions from having the last word in a sentence start a new line. Last words will ALWAYS be kept on the same line, even if it breaks the characters_per_caption_line option.
+  'displayEffectsSpeakerAs': Sounds, // {String} Determines what speaker name should used for sound effects.
+  'displaySpeakerId': number, // {String} Determines the way speakers are identified in the captions. Choose "no" to not display speaker identities at all: ">> example" Choose "number" to display only the speaker number: ">> Speaker 1: example" Choose "name" to display the speaker name: ">> John Doe: example". If you choose "name", the speaker number will be displayed if the name is not available.
+  'iwpName': MECHANICAL, // {String} The named version of element list to generate the transcript from. If not specified, the transcript will be generated from the latest version.
+  'elementlistVersion': 2014-07-31T12:35:52.324389, // {String} The version of element list to generate the captions from. If not specified, the caption will be generated from the latest version. (ISO 8601 Date String)
+  'emitSpeakerChangeTokensAs': -->, // {String} Determine what characters to use to denote speaker changes.
+  'forceCase': lower, // {String} Force the contents of the captions to be all UPPER or lower case. If blank, the case of the captions is not changed.
+  'includeDfxpMetadata': false, // {String} When true, and the caption format requested is DFXP, the jobs name, ID and language will be added to the DFXP metadata header. When false, these data are omitted from the header. Ignored if caption_format does not equal DFXP.
+  'layoutTargetCaptionLengthMs': 4000, // {Integer} Captions generated will, on average, be this duration. However, they may vary significantly based on other parameters you set.
+  'lineBreakOnSentence': true, // {String} Inserts a line break in between sentences that are in the same caption.
+  'lineEndingFormat': OSX, // {String} Determine the end of line (EOL) character to use for the captions.
+  'linesPerCaption': 3, // {Integer} Number of lines to be displayed for each caption.
+  'maskProfanity': true, // {String} Replace profanity with asterisks.
+  'maximumCaptionDuration': 10000, // {Integer} No captions longer than this (in milliseconds) will be produced. If not specified, there is no maximum.
+  'mergeGapInterval': 1500, // {Integer} Captions with a gap between them that is smaller than this (in milliseconds) will have their start and/or end times changed so there is no time gap between the captions.
+  'minimumCaptionLengthMs': 1500, // {Integer} Extends the duration of short captions to the this minimum length. Additional time is taken from later caption blocks to meet this minimum time.
+  'minimumGapBetweenCaptionsMs': 100, // {Integer} Adds a minimum time between captions such as there will always be some time between captions where no text is displayed. When captions are very close together, time will be removed from the caption duration to make the gap.
+  'qtSeamless': true, // {String} Does not put time gaps of any kind between caption blocks. Ignored if caption_format does not equal QT.
+  'removeDisfluencies': false, // {String} Remove verbal disfluencies from the generated transcript. Common disfluencies such as "um" and "ah" are removed while maintaining appropriate punctuation.
+  'removeSoundsList': ["MUSIC","LAUGH"], // {array[String]} A list of sounds to not show in the caption. This is a JSON style list, and should look like ["MUSIC", "LAUGH"]. Ignored if remove_sound_references is true.
+  'removeSoundReferences': false, // {String} Remove ALL non-verbal sound and noise references from the generated transcript. Sounds and unidentified noises are depicted in the caption as [SOUND], [COUGH] and [NOISE]. If this parameter is set, these identifiers are omitted from the caption.
+  'replaceSlang': true, // {String} Replace common slang terms from the generated transcript. Common replacements are "want to" for "wanna", "going to" for "gonna", etc.
+  'silenceMaxMs': 1000, // {Integer} If there is a interval of silence in the middle of a sentence longer than this, then the caption will be split.
+  'singleSpeakerPerCaption': false, // {String} When true, puts each speaker into its own caption. When false, more than one speaker may appear in a single caption.
+  'soundBoundaries': ["(",")"], // {array[String]} Specifies the characters to surround sound references with. The default will generate sound references that look like this: [MUSIC].
+  'soundThreshold': 5000, // {Integer} Sound references that are longer than this threshold will be made their own caption entirely, and will not have any text included with them. If not set, Sound references will be included back to back with text no matter the duration of the sound.
+  'soundTokensByCaption': true, // {String} If true, all sound references will always be in their own caption. If false, more than one sound reference may appear in a single caption.
+  'soundTokensByLine': true, // {String} If true, all sound references will always be in their own line. If false, more than one sound reference may appear in a single line.
+  'soundTokensByCaptionList': [], // {array[String]} If non-empty, the specified sound references will always be in their own caption. If empty, more than one sound reference may appear in a single caption. Ignored if sound_tokens_by_caption is true.
+  'soundTokensByLineList': ["NOISE"], // {array[String]} If non-empty, the specified sound references will always be in their own line. If empty, more than one sound reference may appear in a single line. Ignored if sound_tokens_by_line is true.
+  'speakerOnNewLine': false, // {String} If true, a speaker change will cause a new caption to be made. If false, multiple speakers may appear in a single caption.
+  'srtFormat': {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n, // {String} If the caption format is SRT, determines what the caption blocks will look like. The default, prints caption blocks that look like this:
+
+  1:
+  00:00:06,060 --> 00:00:16,060
+  This is the caption text.
+
+You can alter the caption block by re-arranging or removing the substitution string values, shown enclosed in braces "{}" in the default value below. Substitution strings may used more than once if desired. Any text that is not a substitution string will be displayed as written. To add new lines, include a \n. Note, you may need to escape the \n with an extra backslash when encoding the request.
+
+  'stripSquareBrackets': true, // {String} Removes all square brackets like '[' or ']' from captions. By default square brackets surround sound references like '[MUSIC]', but they may exist as part of the caption text as well.
+  'utf8Mark': true, // {String} Adds a utf8 bytemark to the beginning of the caption. This should only be used if the system you are loading the caption files into needs a byte marker. The vast majority of systems do not.
+  'replaceEnglishSpelling': B // {String} Replaces English spelling with location accurate spelling. i.e. Color --> Colour
+
+A: American
+
+B: British
+
+Z: British ize
+
+U: Australian
+
+C: Canadian
+
+};
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.getCaption(v, jobId, captionFormat, opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Job-getCaption-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Job-getCaption-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using cielo24.Api;
+using cielo24.Client;
+using cielo24.Model;
+
+namespace Example
+{
+    public class getCaptionExample
+    {
+        public void main()
+        {
+            // Configure API key authorization: ApiKeyAuth
+            Configuration.Default.ApiKey.Add("api_token", "YOUR_API_KEY");
+            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+            // Configuration.Default.ApiKeyPrefix.Add("api_token", "Bearer");
+
+            // Create an instance of the API class
+            var apiInstance = new JobApi();
+            var v = 56;  // Integer |  (default to 1)
+            var jobId = 0fbd6015910e42dca25a863c4925d77c;  // String |  (default to null)
+            var captionFormat = SRT;  // String |  (default to null)
+            var buildUrl = false;  // String | Rather than returning the file, return a permanent URL to the file. (optional)  (default to false)
+            var captionWordsMin = 3;  // Integer | Minimum number of words allowed in a caption. (optional)  (default to 1)
+            var captionBySentence = false;  // String | When true, puts each sentence into its own caption. When false, more than one sentence may appear in a single caption. (optional)  (default to true)
+            var charactersPerCaptionLine = 30;  // Integer | Maximum number of characters to be displayed on each caption line. (optional)  (default to 42)
+            var dfxpHeader = <head></head>;  // String | Allows you to specify a custom header for your DFXP caption file. The header should be the entire contents of the header including the opening and closing tags. Ignored if caption_format does not equal DFXP. (optional)  (default to )
+            var disallowDangling = true;  // String | Will prevent captions from having the last word in a sentence start a new line. Last words will ALWAYS be kept on the same line, even if it breaks the characters_per_caption_line option. (optional)  (default to false)
+            var displayEffectsSpeakerAs = Sounds;  // String | Determines what speaker name should used for sound effects. (optional)  (default to Effects)
+            var displaySpeakerId = number;  // String | Determines the way speakers are identified in the captions. Choose "no" to not display speaker identities at all: ">> example" Choose "number" to display only the speaker number: ">> Speaker 1: example" Choose "name" to display the speaker name: ">> John Doe: example". If you choose "name", the speaker number will be displayed if the name is not available. (optional)  (default to name)
+            var iwpName = MECHANICAL;  // String | The named version of element list to generate the transcript from. If not specified, the transcript will be generated from the latest version. (optional)  (default to )
+            var elementlistVersion = 2014-07-31T12:35:52.324389;  // String | The version of element list to generate the captions from. If not specified, the caption will be generated from the latest version. (ISO 8601 Date String) (optional)  (default to )
+            var emitSpeakerChangeTokensAs = -->;  // String | Determine what characters to use to denote speaker changes. (optional)  (default to >>)
+            var forceCase = lower;  // String | Force the contents of the captions to be all UPPER or lower case. If blank, the case of the captions is not changed. (optional)  (default to )
+            var includeDfxpMetadata = false;  // String | When true, and the caption format requested is DFXP, the jobs name, ID and language will be added to the DFXP metadata header. When false, these data are omitted from the header. Ignored if caption_format does not equal DFXP. (optional)  (default to true)
+            var layoutTargetCaptionLengthMs = 4000;  // Integer | Captions generated will, on average, be this duration. However, they may vary significantly based on other parameters you set. (optional)  (default to 5000)
+            var lineBreakOnSentence = true;  // String | Inserts a line break in between sentences that are in the same caption. (optional)  (default to false)
+            var lineEndingFormat = OSX;  // String | Determine the end of line (EOL) character to use for the captions. (optional)  (default to UNIX)
+            var linesPerCaption = 3;  // Integer | Number of lines to be displayed for each caption. (optional)  (default to 2)
+            var maskProfanity = true;  // String | Replace profanity with asterisks. (optional)  (default to false)
+            var maximumCaptionDuration = 10000;  // Integer | No captions longer than this (in milliseconds) will be produced. If not specified, there is no maximum. (optional)  (default to null)
+            var mergeGapInterval = 1500;  // Integer | Captions with a gap between them that is smaller than this (in milliseconds) will have their start and/or end times changed so there is no time gap between the captions. (optional)  (default to 1000)
+            var minimumCaptionLengthMs = 1500;  // Integer | Extends the duration of short captions to the this minimum length. Additional time is taken from later caption blocks to meet this minimum time. (optional)  (default to null)
+            var minimumGapBetweenCaptionsMs = 100;  // Integer | Adds a minimum time between captions such as there will always be some time between captions where no text is displayed. When captions are very close together, time will be removed from the caption duration to make the gap. (optional)  (default to null)
+            var qtSeamless = true;  // String | Does not put time gaps of any kind between caption blocks. Ignored if caption_format does not equal QT. (optional)  (default to false)
+            var removeDisfluencies = false;  // String | Remove verbal disfluencies from the generated transcript. Common disfluencies such as "um" and "ah" are removed while maintaining appropriate punctuation. (optional)  (default to true)
+            var removeSoundsList = new array[String](); // array[String] | A list of sounds to not show in the caption. This is a JSON style list, and should look like ["MUSIC", "LAUGH"]. Ignored if remove_sound_references is true. (optional)  (default to [])
+            var removeSoundReferences = false;  // String | Remove ALL non-verbal sound and noise references from the generated transcript. Sounds and unidentified noises are depicted in the caption as [SOUND], [COUGH] and [NOISE]. If this parameter is set, these identifiers are omitted from the caption. (optional)  (default to true)
+            var replaceSlang = true;  // String | Replace common slang terms from the generated transcript. Common replacements are "want to" for "wanna", "going to" for "gonna", etc. (optional)  (default to false)
+            var silenceMaxMs = 1000;  // Integer | If there is a interval of silence in the middle of a sentence longer than this, then the caption will be split. (optional)  (default to 2000)
+            var singleSpeakerPerCaption = false;  // String | When true, puts each speaker into its own caption. When false, more than one speaker may appear in a single caption. (optional)  (default to true)
+            var soundBoundaries = new array[String](); // array[String] | Specifies the characters to surround sound references with. The default will generate sound references that look like this: [MUSIC]. (optional)  (default to ["[","]"])
+            var soundThreshold = 5000;  // Integer | Sound references that are longer than this threshold will be made their own caption entirely, and will not have any text included with them. If not set, Sound references will be included back to back with text no matter the duration of the sound. (optional)  (default to null)
+            var soundTokensByCaption = true;  // String | If true, all sound references will always be in their own caption. If false, more than one sound reference may appear in a single caption. (optional)  (default to false)
+            var soundTokensByLine = true;  // String | If true, all sound references will always be in their own line. If false, more than one sound reference may appear in a single line. (optional)  (default to false)
+            var soundTokensByCaptionList = new array[String](); // array[String] | If non-empty, the specified sound references will always be in their own caption. If empty, more than one sound reference may appear in a single caption. Ignored if sound_tokens_by_caption is true. (optional)  (default to ["BLANK_AUDIO","MUSIC"])
+            var soundTokensByLineList = new array[String](); // array[String] | If non-empty, the specified sound references will always be in their own line. If empty, more than one sound reference may appear in a single line. Ignored if sound_tokens_by_line is true. (optional)  (default to ["BLANK_AUDIO","MUSIC"])
+            var speakerOnNewLine = false;  // String | If true, a speaker change will cause a new caption to be made. If false, multiple speakers may appear in a single caption. (optional)  (default to true)
+            var srtFormat = {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n;  // String | If the caption format is SRT, determines what the caption blocks will look like. The default, prints caption blocks that look like this:
+
+  1:
+  00:00:06,060 --> 00:00:16,060
+  This is the caption text.
+
+You can alter the caption block by re-arranging or removing the substitution string values, shown enclosed in braces "{}" in the default value below. Substitution strings may used more than once if desired. Any text that is not a substitution string will be displayed as written. To add new lines, include a \n. Note, you may need to escape the \n with an extra backslash when encoding the request.
+ (optional)  (default to {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n)
+            var stripSquareBrackets = true;  // String | Removes all square brackets like '[' or ']' from captions. By default square brackets surround sound references like '[MUSIC]', but they may exist as part of the caption text as well. (optional)  (default to false)
+            var utf8Mark = true;  // String | Adds a utf8 bytemark to the beginning of the caption. This should only be used if the system you are loading the caption files into needs a byte marker. The vast majority of systems do not. (optional)  (default to false)
+            var replaceEnglishSpelling = B;  // String | Replaces English spelling with location accurate spelling. i.e. Color --> Colour
+
+A: American
+
+B: British
+
+Z: British ize
+
+U: Australian
+
+C: Canadian
+ (optional)  (default to A)
+
+            try {
+                'String' result = apiInstance.getCaption(v, jobId, captionFormat, buildUrl, captionWordsMin, captionBySentence, charactersPerCaptionLine, dfxpHeader, disallowDangling, displayEffectsSpeakerAs, displaySpeakerId, iwpName, elementlistVersion, emitSpeakerChangeTokensAs, forceCase, includeDfxpMetadata, layoutTargetCaptionLengthMs, lineBreakOnSentence, lineEndingFormat, linesPerCaption, maskProfanity, maximumCaptionDuration, mergeGapInterval, minimumCaptionLengthMs, minimumGapBetweenCaptionsMs, qtSeamless, removeDisfluencies, removeSoundsList, removeSoundReferences, replaceSlang, silenceMaxMs, singleSpeakerPerCaption, soundBoundaries, soundThreshold, soundTokensByCaption, soundTokensByLine, soundTokensByCaptionList, soundTokensByLineList, speakerOnNewLine, srtFormat, stripSquareBrackets, utf8Mark, replaceEnglishSpelling);
+                Debug.WriteLine(result);
+            } catch (Exception e) {
+                Debug.Print("Exception when calling JobApi.getCaption: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-getCaption-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: ApiKeyAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setApiKey('api_token', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// OpenAPITools\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('api_token', 'Bearer');
+
+// Create an instance of the API class
+$api_instance = new OpenAPITools\Client\Api\JobApi();
+$v = 56; // Integer | 
+$jobId = 0fbd6015910e42dca25a863c4925d77c; // String | 
+$captionFormat = SRT; // String | 
+$buildUrl = false; // String | Rather than returning the file, return a permanent URL to the file.
+$captionWordsMin = 3; // Integer | Minimum number of words allowed in a caption.
+$captionBySentence = false; // String | When true, puts each sentence into its own caption. When false, more than one sentence may appear in a single caption.
+$charactersPerCaptionLine = 30; // Integer | Maximum number of characters to be displayed on each caption line.
+$dfxpHeader = <head></head>; // String | Allows you to specify a custom header for your DFXP caption file. The header should be the entire contents of the header including the opening and closing tags. Ignored if caption_format does not equal DFXP.
+$disallowDangling = true; // String | Will prevent captions from having the last word in a sentence start a new line. Last words will ALWAYS be kept on the same line, even if it breaks the characters_per_caption_line option.
+$displayEffectsSpeakerAs = Sounds; // String | Determines what speaker name should used for sound effects.
+$displaySpeakerId = number; // String | Determines the way speakers are identified in the captions. Choose "no" to not display speaker identities at all: ">> example" Choose "number" to display only the speaker number: ">> Speaker 1: example" Choose "name" to display the speaker name: ">> John Doe: example". If you choose "name", the speaker number will be displayed if the name is not available.
+$iwpName = MECHANICAL; // String | The named version of element list to generate the transcript from. If not specified, the transcript will be generated from the latest version.
+$elementlistVersion = 2014-07-31T12:35:52.324389; // String | The version of element list to generate the captions from. If not specified, the caption will be generated from the latest version. (ISO 8601 Date String)
+$emitSpeakerChangeTokensAs = -->; // String | Determine what characters to use to denote speaker changes.
+$forceCase = lower; // String | Force the contents of the captions to be all UPPER or lower case. If blank, the case of the captions is not changed.
+$includeDfxpMetadata = false; // String | When true, and the caption format requested is DFXP, the jobs name, ID and language will be added to the DFXP metadata header. When false, these data are omitted from the header. Ignored if caption_format does not equal DFXP.
+$layoutTargetCaptionLengthMs = 4000; // Integer | Captions generated will, on average, be this duration. However, they may vary significantly based on other parameters you set.
+$lineBreakOnSentence = true; // String | Inserts a line break in between sentences that are in the same caption.
+$lineEndingFormat = OSX; // String | Determine the end of line (EOL) character to use for the captions.
+$linesPerCaption = 3; // Integer | Number of lines to be displayed for each caption.
+$maskProfanity = true; // String | Replace profanity with asterisks.
+$maximumCaptionDuration = 10000; // Integer | No captions longer than this (in milliseconds) will be produced. If not specified, there is no maximum.
+$mergeGapInterval = 1500; // Integer | Captions with a gap between them that is smaller than this (in milliseconds) will have their start and/or end times changed so there is no time gap between the captions.
+$minimumCaptionLengthMs = 1500; // Integer | Extends the duration of short captions to the this minimum length. Additional time is taken from later caption blocks to meet this minimum time.
+$minimumGapBetweenCaptionsMs = 100; // Integer | Adds a minimum time between captions such as there will always be some time between captions where no text is displayed. When captions are very close together, time will be removed from the caption duration to make the gap.
+$qtSeamless = true; // String | Does not put time gaps of any kind between caption blocks. Ignored if caption_format does not equal QT.
+$removeDisfluencies = false; // String | Remove verbal disfluencies from the generated transcript. Common disfluencies such as "um" and "ah" are removed while maintaining appropriate punctuation.
+$removeSoundsList = ["MUSIC","LAUGH"]; // array[String] | A list of sounds to not show in the caption. This is a JSON style list, and should look like ["MUSIC", "LAUGH"]. Ignored if remove_sound_references is true.
+$removeSoundReferences = false; // String | Remove ALL non-verbal sound and noise references from the generated transcript. Sounds and unidentified noises are depicted in the caption as [SOUND], [COUGH] and [NOISE]. If this parameter is set, these identifiers are omitted from the caption.
+$replaceSlang = true; // String | Replace common slang terms from the generated transcript. Common replacements are "want to" for "wanna", "going to" for "gonna", etc.
+$silenceMaxMs = 1000; // Integer | If there is a interval of silence in the middle of a sentence longer than this, then the caption will be split.
+$singleSpeakerPerCaption = false; // String | When true, puts each speaker into its own caption. When false, more than one speaker may appear in a single caption.
+$soundBoundaries = ["(",")"]; // array[String] | Specifies the characters to surround sound references with. The default will generate sound references that look like this: [MUSIC].
+$soundThreshold = 5000; // Integer | Sound references that are longer than this threshold will be made their own caption entirely, and will not have any text included with them. If not set, Sound references will be included back to back with text no matter the duration of the sound.
+$soundTokensByCaption = true; // String | If true, all sound references will always be in their own caption. If false, more than one sound reference may appear in a single caption.
+$soundTokensByLine = true; // String | If true, all sound references will always be in their own line. If false, more than one sound reference may appear in a single line.
+$soundTokensByCaptionList = []; // array[String] | If non-empty, the specified sound references will always be in their own caption. If empty, more than one sound reference may appear in a single caption. Ignored if sound_tokens_by_caption is true.
+$soundTokensByLineList = ["NOISE"]; // array[String] | If non-empty, the specified sound references will always be in their own line. If empty, more than one sound reference may appear in a single line. Ignored if sound_tokens_by_line is true.
+$speakerOnNewLine = false; // String | If true, a speaker change will cause a new caption to be made. If false, multiple speakers may appear in a single caption.
+$srtFormat = {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n; // String | If the caption format is SRT, determines what the caption blocks will look like. The default, prints caption blocks that look like this:
+
+  1:
+  00:00:06,060 --> 00:00:16,060
+  This is the caption text.
+
+You can alter the caption block by re-arranging or removing the substitution string values, shown enclosed in braces "{}" in the default value below. Substitution strings may used more than once if desired. Any text that is not a substitution string will be displayed as written. To add new lines, include a \n. Note, you may need to escape the \n with an extra backslash when encoding the request.
+
+$stripSquareBrackets = true; // String | Removes all square brackets like '[' or ']' from captions. By default square brackets surround sound references like '[MUSIC]', but they may exist as part of the caption text as well.
+$utf8Mark = true; // String | Adds a utf8 bytemark to the beginning of the caption. This should only be used if the system you are loading the caption files into needs a byte marker. The vast majority of systems do not.
+$replaceEnglishSpelling = B; // String | Replaces English spelling with location accurate spelling. i.e. Color --> Colour
+
+A: American
+
+B: British
+
+Z: British ize
+
+U: Australian
+
+C: Canadian
+
+
+try {
+    $result = $api_instance->getCaption($v, $jobId, $captionFormat, $buildUrl, $captionWordsMin, $captionBySentence, $charactersPerCaptionLine, $dfxpHeader, $disallowDangling, $displayEffectsSpeakerAs, $displaySpeakerId, $iwpName, $elementlistVersion, $emitSpeakerChangeTokensAs, $forceCase, $includeDfxpMetadata, $layoutTargetCaptionLengthMs, $lineBreakOnSentence, $lineEndingFormat, $linesPerCaption, $maskProfanity, $maximumCaptionDuration, $mergeGapInterval, $minimumCaptionLengthMs, $minimumGapBetweenCaptionsMs, $qtSeamless, $removeDisfluencies, $removeSoundsList, $removeSoundReferences, $replaceSlang, $silenceMaxMs, $singleSpeakerPerCaption, $soundBoundaries, $soundThreshold, $soundTokensByCaption, $soundTokensByLine, $soundTokensByCaptionList, $soundTokensByLineList, $speakerOnNewLine, $srtFormat, $stripSquareBrackets, $utf8Mark, $replaceEnglishSpelling);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling JobApi->getCaption: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-getCaption-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::OPenAPIClient::Configuration;
+use WWW::OPenAPIClient::JobApi;
+
+# Configure API key authorization: ApiKeyAuth
+$WWW::OPenAPIClient::Configuration::api_key->{'api_token'} = 'YOUR_API_KEY';
+# uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+#$WWW::OPenAPIClient::Configuration::api_key_prefix->{'api_token'} = "Bearer";
+
+# Create an instance of the API class
+my $api_instance = WWW::OPenAPIClient::JobApi->new();
+my $v = 56; # Integer | 
+my $jobId = 0fbd6015910e42dca25a863c4925d77c; # String | 
+my $captionFormat = SRT; # String | 
+my $buildUrl = false; # String | Rather than returning the file, return a permanent URL to the file.
+my $captionWordsMin = 3; # Integer | Minimum number of words allowed in a caption.
+my $captionBySentence = false; # String | When true, puts each sentence into its own caption. When false, more than one sentence may appear in a single caption.
+my $charactersPerCaptionLine = 30; # Integer | Maximum number of characters to be displayed on each caption line.
+my $dfxpHeader = <head></head>; # String | Allows you to specify a custom header for your DFXP caption file. The header should be the entire contents of the header including the opening and closing tags. Ignored if caption_format does not equal DFXP.
+my $disallowDangling = true; # String | Will prevent captions from having the last word in a sentence start a new line. Last words will ALWAYS be kept on the same line, even if it breaks the characters_per_caption_line option.
+my $displayEffectsSpeakerAs = Sounds; # String | Determines what speaker name should used for sound effects.
+my $displaySpeakerId = number; # String | Determines the way speakers are identified in the captions. Choose "no" to not display speaker identities at all: ">> example" Choose "number" to display only the speaker number: ">> Speaker 1: example" Choose "name" to display the speaker name: ">> John Doe: example". If you choose "name", the speaker number will be displayed if the name is not available.
+my $iwpName = MECHANICAL; # String | The named version of element list to generate the transcript from. If not specified, the transcript will be generated from the latest version.
+my $elementlistVersion = 2014-07-31T12:35:52.324389; # String | The version of element list to generate the captions from. If not specified, the caption will be generated from the latest version. (ISO 8601 Date String)
+my $emitSpeakerChangeTokensAs = -->; # String | Determine what characters to use to denote speaker changes.
+my $forceCase = lower; # String | Force the contents of the captions to be all UPPER or lower case. If blank, the case of the captions is not changed.
+my $includeDfxpMetadata = false; # String | When true, and the caption format requested is DFXP, the jobs name, ID and language will be added to the DFXP metadata header. When false, these data are omitted from the header. Ignored if caption_format does not equal DFXP.
+my $layoutTargetCaptionLengthMs = 4000; # Integer | Captions generated will, on average, be this duration. However, they may vary significantly based on other parameters you set.
+my $lineBreakOnSentence = true; # String | Inserts a line break in between sentences that are in the same caption.
+my $lineEndingFormat = OSX; # String | Determine the end of line (EOL) character to use for the captions.
+my $linesPerCaption = 3; # Integer | Number of lines to be displayed for each caption.
+my $maskProfanity = true; # String | Replace profanity with asterisks.
+my $maximumCaptionDuration = 10000; # Integer | No captions longer than this (in milliseconds) will be produced. If not specified, there is no maximum.
+my $mergeGapInterval = 1500; # Integer | Captions with a gap between them that is smaller than this (in milliseconds) will have their start and/or end times changed so there is no time gap between the captions.
+my $minimumCaptionLengthMs = 1500; # Integer | Extends the duration of short captions to the this minimum length. Additional time is taken from later caption blocks to meet this minimum time.
+my $minimumGapBetweenCaptionsMs = 100; # Integer | Adds a minimum time between captions such as there will always be some time between captions where no text is displayed. When captions are very close together, time will be removed from the caption duration to make the gap.
+my $qtSeamless = true; # String | Does not put time gaps of any kind between caption blocks. Ignored if caption_format does not equal QT.
+my $removeDisfluencies = false; # String | Remove verbal disfluencies from the generated transcript. Common disfluencies such as "um" and "ah" are removed while maintaining appropriate punctuation.
+my $removeSoundsList = [["MUSIC","LAUGH"]]; # array[String] | A list of sounds to not show in the caption. This is a JSON style list, and should look like ["MUSIC", "LAUGH"]. Ignored if remove_sound_references is true.
+my $removeSoundReferences = false; # String | Remove ALL non-verbal sound and noise references from the generated transcript. Sounds and unidentified noises are depicted in the caption as [SOUND], [COUGH] and [NOISE]. If this parameter is set, these identifiers are omitted from the caption.
+my $replaceSlang = true; # String | Replace common slang terms from the generated transcript. Common replacements are "want to" for "wanna", "going to" for "gonna", etc.
+my $silenceMaxMs = 1000; # Integer | If there is a interval of silence in the middle of a sentence longer than this, then the caption will be split.
+my $singleSpeakerPerCaption = false; # String | When true, puts each speaker into its own caption. When false, more than one speaker may appear in a single caption.
+my $soundBoundaries = [["(",")"]]; # array[String] | Specifies the characters to surround sound references with. The default will generate sound references that look like this: [MUSIC].
+my $soundThreshold = 5000; # Integer | Sound references that are longer than this threshold will be made their own caption entirely, and will not have any text included with them. If not set, Sound references will be included back to back with text no matter the duration of the sound.
+my $soundTokensByCaption = true; # String | If true, all sound references will always be in their own caption. If false, more than one sound reference may appear in a single caption.
+my $soundTokensByLine = true; # String | If true, all sound references will always be in their own line. If false, more than one sound reference may appear in a single line.
+my $soundTokensByCaptionList = [[]]; # array[String] | If non-empty, the specified sound references will always be in their own caption. If empty, more than one sound reference may appear in a single caption. Ignored if sound_tokens_by_caption is true.
+my $soundTokensByLineList = [["NOISE"]]; # array[String] | If non-empty, the specified sound references will always be in their own line. If empty, more than one sound reference may appear in a single line. Ignored if sound_tokens_by_line is true.
+my $speakerOnNewLine = false; # String | If true, a speaker change will cause a new caption to be made. If false, multiple speakers may appear in a single caption.
+my $srtFormat = {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n; # String | If the caption format is SRT, determines what the caption blocks will look like. The default, prints caption blocks that look like this:
+
+  1:
+  00:00:06,060 --> 00:00:16,060
+  This is the caption text.
+
+You can alter the caption block by re-arranging or removing the substitution string values, shown enclosed in braces "{}" in the default value below. Substitution strings may used more than once if desired. Any text that is not a substitution string will be displayed as written. To add new lines, include a \n. Note, you may need to escape the \n with an extra backslash when encoding the request.
+
+my $stripSquareBrackets = true; # String | Removes all square brackets like '[' or ']' from captions. By default square brackets surround sound references like '[MUSIC]', but they may exist as part of the caption text as well.
+my $utf8Mark = true; # String | Adds a utf8 bytemark to the beginning of the caption. This should only be used if the system you are loading the caption files into needs a byte marker. The vast majority of systems do not.
+my $replaceEnglishSpelling = B; # String | Replaces English spelling with location accurate spelling. i.e. Color --> Colour
+
+A: American
+
+B: British
+
+Z: British ize
+
+U: Australian
+
+C: Canadian
+
+
+eval {
+    my $result = $api_instance->getCaption(v => $v, jobId => $jobId, captionFormat => $captionFormat, buildUrl => $buildUrl, captionWordsMin => $captionWordsMin, captionBySentence => $captionBySentence, charactersPerCaptionLine => $charactersPerCaptionLine, dfxpHeader => $dfxpHeader, disallowDangling => $disallowDangling, displayEffectsSpeakerAs => $displayEffectsSpeakerAs, displaySpeakerId => $displaySpeakerId, iwpName => $iwpName, elementlistVersion => $elementlistVersion, emitSpeakerChangeTokensAs => $emitSpeakerChangeTokensAs, forceCase => $forceCase, includeDfxpMetadata => $includeDfxpMetadata, layoutTargetCaptionLengthMs => $layoutTargetCaptionLengthMs, lineBreakOnSentence => $lineBreakOnSentence, lineEndingFormat => $lineEndingFormat, linesPerCaption => $linesPerCaption, maskProfanity => $maskProfanity, maximumCaptionDuration => $maximumCaptionDuration, mergeGapInterval => $mergeGapInterval, minimumCaptionLengthMs => $minimumCaptionLengthMs, minimumGapBetweenCaptionsMs => $minimumGapBetweenCaptionsMs, qtSeamless => $qtSeamless, removeDisfluencies => $removeDisfluencies, removeSoundsList => $removeSoundsList, removeSoundReferences => $removeSoundReferences, replaceSlang => $replaceSlang, silenceMaxMs => $silenceMaxMs, singleSpeakerPerCaption => $singleSpeakerPerCaption, soundBoundaries => $soundBoundaries, soundThreshold => $soundThreshold, soundTokensByCaption => $soundTokensByCaption, soundTokensByLine => $soundTokensByLine, soundTokensByCaptionList => $soundTokensByCaptionList, soundTokensByLineList => $soundTokensByLineList, speakerOnNewLine => $speakerOnNewLine, srtFormat => $srtFormat, stripSquareBrackets => $stripSquareBrackets, utf8Mark => $utf8Mark, replaceEnglishSpelling => $replaceEnglishSpelling);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling JobApi->getCaption: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-getCaption-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import openapi_client
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Configure API key authorization: ApiKeyAuth
+openapi_client.configuration.api_key['api_token'] = 'YOUR_API_KEY'
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# openapi_client.configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Create an instance of the API class
+api_instance = openapi_client.JobApi()
+v = 56 # Integer |  (default to 1)
+jobId = 0fbd6015910e42dca25a863c4925d77c # String |  (default to null)
+captionFormat = SRT # String |  (default to null)
+buildUrl = false # String | Rather than returning the file, return a permanent URL to the file. (optional) (default to false)
+captionWordsMin = 3 # Integer | Minimum number of words allowed in a caption. (optional) (default to 1)
+captionBySentence = false # String | When true, puts each sentence into its own caption. When false, more than one sentence may appear in a single caption. (optional) (default to true)
+charactersPerCaptionLine = 30 # Integer | Maximum number of characters to be displayed on each caption line. (optional) (default to 42)
+dfxpHeader = <head></head> # String | Allows you to specify a custom header for your DFXP caption file. The header should be the entire contents of the header including the opening and closing tags. Ignored if caption_format does not equal DFXP. (optional) (default to )
+disallowDangling = true # String | Will prevent captions from having the last word in a sentence start a new line. Last words will ALWAYS be kept on the same line, even if it breaks the characters_per_caption_line option. (optional) (default to false)
+displayEffectsSpeakerAs = Sounds # String | Determines what speaker name should used for sound effects. (optional) (default to Effects)
+displaySpeakerId = number # String | Determines the way speakers are identified in the captions. Choose "no" to not display speaker identities at all: ">> example" Choose "number" to display only the speaker number: ">> Speaker 1: example" Choose "name" to display the speaker name: ">> John Doe: example". If you choose "name", the speaker number will be displayed if the name is not available. (optional) (default to name)
+iwpName = MECHANICAL # String | The named version of element list to generate the transcript from. If not specified, the transcript will be generated from the latest version. (optional) (default to )
+elementlistVersion = 2014-07-31T12:35:52.324389 # String | The version of element list to generate the captions from. If not specified, the caption will be generated from the latest version. (ISO 8601 Date String) (optional) (default to )
+emitSpeakerChangeTokensAs = --> # String | Determine what characters to use to denote speaker changes. (optional) (default to >>)
+forceCase = lower # String | Force the contents of the captions to be all UPPER or lower case. If blank, the case of the captions is not changed. (optional) (default to )
+includeDfxpMetadata = false # String | When true, and the caption format requested is DFXP, the jobs name, ID and language will be added to the DFXP metadata header. When false, these data are omitted from the header. Ignored if caption_format does not equal DFXP. (optional) (default to true)
+layoutTargetCaptionLengthMs = 4000 # Integer | Captions generated will, on average, be this duration. However, they may vary significantly based on other parameters you set. (optional) (default to 5000)
+lineBreakOnSentence = true # String | Inserts a line break in between sentences that are in the same caption. (optional) (default to false)
+lineEndingFormat = OSX # String | Determine the end of line (EOL) character to use for the captions. (optional) (default to UNIX)
+linesPerCaption = 3 # Integer | Number of lines to be displayed for each caption. (optional) (default to 2)
+maskProfanity = true # String | Replace profanity with asterisks. (optional) (default to false)
+maximumCaptionDuration = 10000 # Integer | No captions longer than this (in milliseconds) will be produced. If not specified, there is no maximum. (optional) (default to null)
+mergeGapInterval = 1500 # Integer | Captions with a gap between them that is smaller than this (in milliseconds) will have their start and/or end times changed so there is no time gap between the captions. (optional) (default to 1000)
+minimumCaptionLengthMs = 1500 # Integer | Extends the duration of short captions to the this minimum length. Additional time is taken from later caption blocks to meet this minimum time. (optional) (default to null)
+minimumGapBetweenCaptionsMs = 100 # Integer | Adds a minimum time between captions such as there will always be some time between captions where no text is displayed. When captions are very close together, time will be removed from the caption duration to make the gap. (optional) (default to null)
+qtSeamless = true # String | Does not put time gaps of any kind between caption blocks. Ignored if caption_format does not equal QT. (optional) (default to false)
+removeDisfluencies = false # String | Remove verbal disfluencies from the generated transcript. Common disfluencies such as "um" and "ah" are removed while maintaining appropriate punctuation. (optional) (default to true)
+removeSoundsList = ["MUSIC","LAUGH"] # array[String] | A list of sounds to not show in the caption. This is a JSON style list, and should look like ["MUSIC", "LAUGH"]. Ignored if remove_sound_references is true. (optional) (default to [])
+removeSoundReferences = false # String | Remove ALL non-verbal sound and noise references from the generated transcript. Sounds and unidentified noises are depicted in the caption as [SOUND], [COUGH] and [NOISE]. If this parameter is set, these identifiers are omitted from the caption. (optional) (default to true)
+replaceSlang = true # String | Replace common slang terms from the generated transcript. Common replacements are "want to" for "wanna", "going to" for "gonna", etc. (optional) (default to false)
+silenceMaxMs = 1000 # Integer | If there is a interval of silence in the middle of a sentence longer than this, then the caption will be split. (optional) (default to 2000)
+singleSpeakerPerCaption = false # String | When true, puts each speaker into its own caption. When false, more than one speaker may appear in a single caption. (optional) (default to true)
+soundBoundaries = ["(",")"] # array[String] | Specifies the characters to surround sound references with. The default will generate sound references that look like this: [MUSIC]. (optional) (default to ["[","]"])
+soundThreshold = 5000 # Integer | Sound references that are longer than this threshold will be made their own caption entirely, and will not have any text included with them. If not set, Sound references will be included back to back with text no matter the duration of the sound. (optional) (default to null)
+soundTokensByCaption = true # String | If true, all sound references will always be in their own caption. If false, more than one sound reference may appear in a single caption. (optional) (default to false)
+soundTokensByLine = true # String | If true, all sound references will always be in their own line. If false, more than one sound reference may appear in a single line. (optional) (default to false)
+soundTokensByCaptionList = [] # array[String] | If non-empty, the specified sound references will always be in their own caption. If empty, more than one sound reference may appear in a single caption. Ignored if sound_tokens_by_caption is true. (optional) (default to ["BLANK_AUDIO","MUSIC"])
+soundTokensByLineList = ["NOISE"] # array[String] | If non-empty, the specified sound references will always be in their own line. If empty, more than one sound reference may appear in a single line. Ignored if sound_tokens_by_line is true. (optional) (default to ["BLANK_AUDIO","MUSIC"])
+speakerOnNewLine = false # String | If true, a speaker change will cause a new caption to be made. If false, multiple speakers may appear in a single caption. (optional) (default to true)
+srtFormat = {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n # String | If the caption format is SRT, determines what the caption blocks will look like. The default, prints caption blocks that look like this:
+
+  1:
+  00:00:06,060 --> 00:00:16,060
+  This is the caption text.
+
+You can alter the caption block by re-arranging or removing the substitution string values, shown enclosed in braces "{}" in the default value below. Substitution strings may used more than once if desired. Any text that is not a substitution string will be displayed as written. To add new lines, include a \n. Note, you may need to escape the \n with an extra backslash when encoding the request.
+ (optional) (default to {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n)
+stripSquareBrackets = true # String | Removes all square brackets like '[' or ']' from captions. By default square brackets surround sound references like '[MUSIC]', but they may exist as part of the caption text as well. (optional) (default to false)
+utf8Mark = true # String | Adds a utf8 bytemark to the beginning of the caption. This should only be used if the system you are loading the caption files into needs a byte marker. The vast majority of systems do not. (optional) (default to false)
+replaceEnglishSpelling = B # String | Replaces English spelling with location accurate spelling. i.e. Color --> Colour
+
+A: American
+
+B: British
+
+Z: British ize
+
+U: Australian
+
+C: Canadian
+ (optional) (default to A)
+
+try:
+    api_response = api_instance.get_caption(v, jobId, captionFormat, buildUrl=buildUrl, captionWordsMin=captionWordsMin, captionBySentence=captionBySentence, charactersPerCaptionLine=charactersPerCaptionLine, dfxpHeader=dfxpHeader, disallowDangling=disallowDangling, displayEffectsSpeakerAs=displayEffectsSpeakerAs, displaySpeakerId=displaySpeakerId, iwpName=iwpName, elementlistVersion=elementlistVersion, emitSpeakerChangeTokensAs=emitSpeakerChangeTokensAs, forceCase=forceCase, includeDfxpMetadata=includeDfxpMetadata, layoutTargetCaptionLengthMs=layoutTargetCaptionLengthMs, lineBreakOnSentence=lineBreakOnSentence, lineEndingFormat=lineEndingFormat, linesPerCaption=linesPerCaption, maskProfanity=maskProfanity, maximumCaptionDuration=maximumCaptionDuration, mergeGapInterval=mergeGapInterval, minimumCaptionLengthMs=minimumCaptionLengthMs, minimumGapBetweenCaptionsMs=minimumGapBetweenCaptionsMs, qtSeamless=qtSeamless, removeDisfluencies=removeDisfluencies, removeSoundsList=removeSoundsList, removeSoundReferences=removeSoundReferences, replaceSlang=replaceSlang, silenceMaxMs=silenceMaxMs, singleSpeakerPerCaption=singleSpeakerPerCaption, soundBoundaries=soundBoundaries, soundThreshold=soundThreshold, soundTokensByCaption=soundTokensByCaption, soundTokensByLine=soundTokensByLine, soundTokensByCaptionList=soundTokensByCaptionList, soundTokensByLineList=soundTokensByLineList, speakerOnNewLine=speakerOnNewLine, srtFormat=srtFormat, stripSquareBrackets=stripSquareBrackets, utf8Mark=utf8Mark, replaceEnglishSpelling=replaceEnglishSpelling)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling JobApi->getCaption: %s\n" % e)</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-getCaption-0-rust">
+                              <pre class="prettyprint"><code class="language-rust">extern crate JobApi;
+
+pub fn main() {
+    let v = 56; // Integer
+    let jobId = 0fbd6015910e42dca25a863c4925d77c; // String
+    let captionFormat = SRT; // String
+    let buildUrl = false; // String
+    let captionWordsMin = 3; // Integer
+    let captionBySentence = false; // String
+    let charactersPerCaptionLine = 30; // Integer
+    let dfxpHeader = <head></head>; // String
+    let disallowDangling = true; // String
+    let displayEffectsSpeakerAs = Sounds; // String
+    let displaySpeakerId = number; // String
+    let iwpName = MECHANICAL; // String
+    let elementlistVersion = 2014-07-31T12:35:52.324389; // String
+    let emitSpeakerChangeTokensAs = -->; // String
+    let forceCase = lower; // String
+    let includeDfxpMetadata = false; // String
+    let layoutTargetCaptionLengthMs = 4000; // Integer
+    let lineBreakOnSentence = true; // String
+    let lineEndingFormat = OSX; // String
+    let linesPerCaption = 3; // Integer
+    let maskProfanity = true; // String
+    let maximumCaptionDuration = 10000; // Integer
+    let mergeGapInterval = 1500; // Integer
+    let minimumCaptionLengthMs = 1500; // Integer
+    let minimumGapBetweenCaptionsMs = 100; // Integer
+    let qtSeamless = true; // String
+    let removeDisfluencies = false; // String
+    let removeSoundsList = ["MUSIC","LAUGH"]; // array[String]
+    let removeSoundReferences = false; // String
+    let replaceSlang = true; // String
+    let silenceMaxMs = 1000; // Integer
+    let singleSpeakerPerCaption = false; // String
+    let soundBoundaries = ["(",")"]; // array[String]
+    let soundThreshold = 5000; // Integer
+    let soundTokensByCaption = true; // String
+    let soundTokensByLine = true; // String
+    let soundTokensByCaptionList = []; // array[String]
+    let soundTokensByLineList = ["NOISE"]; // array[String]
+    let speakerOnNewLine = false; // String
+    let srtFormat = {caption_number:d}\n{start_hour:02d}:{start_minute:02d}:{start_second:02d},{start_millisecond:03d} -->{end_hour:02d}:{end_minute:02d}:{end_second:02d},{end_millisecond:03d}\n{caption_text}\n\n; // String
+    let stripSquareBrackets = true; // String
+    let utf8Mark = true; // String
+    let replaceEnglishSpelling = B; // String
+
+    let mut context = JobApi::Context::default();
+    let result = client.getCaption(v, jobId, captionFormat, buildUrl, captionWordsMin, captionBySentence, charactersPerCaptionLine, dfxpHeader, disallowDangling, displayEffectsSpeakerAs, displaySpeakerId, iwpName, elementlistVersion, emitSpeakerChangeTokensAs, forceCase, includeDfxpMetadata, layoutTargetCaptionLengthMs, lineBreakOnSentence, lineEndingFormat, linesPerCaption, maskProfanity, maximumCaptionDuration, mergeGapInterval, minimumCaptionLengthMs, minimumGapBetweenCaptionsMs, qtSeamless, removeDisfluencies, removeSoundsList, removeSoundReferences, replaceSlang, silenceMaxMs, singleSpeakerPerCaption, soundBoundaries, soundThreshold, soundTokensByCaption, soundTokensByLine, soundTokensByCaptionList, soundTokensByLineList, speakerOnNewLine, srtFormat, stripSquareBrackets, utf8Mark, replaceEnglishSpelling, &context).wait();
+
+    println!("{:?}", result);
+}
+</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Scopes</h2>
+                          <table>
+                            
+                          </table>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">v*</td>
+<td>
+
+
+    <div id="d2e199_getCaption_v">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">job_id*</td>
+<td>
+
+
+    <div id="d2e199_getCaption_jobId">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">caption_format*</td>
+<td>
+
+
+    <div id="d2e199_getCaption_captionFormat">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">build_url</td>
+<td>
+
+
+    <div id="d2e199_getCaption_buildUrl">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Rather than returning the file, return a permanent URL to the file.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">caption_words_min</td>
+<td>
+
+
+    <div id="d2e199_getCaption_captionWordsMin">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description marked">
+Minimum number of words allowed in a caption.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">caption_by_sentence</td>
+<td>
+
+
+    <div id="d2e199_getCaption_captionBySentence">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+When true, puts each sentence into its own caption. When false, more than one sentence may appear in a single caption.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">characters_per_caption_line</td>
+<td>
+
+
+    <div id="d2e199_getCaption_charactersPerCaptionLine">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description marked">
+Maximum number of characters to be displayed on each caption line.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">dfxp_header</td>
+<td>
+
+
+    <div id="d2e199_getCaption_dfxpHeader">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Allows you to specify a custom header for your DFXP caption file. The header should be the entire contents of the header including the opening and closing tags. Ignored if caption_format does not equal DFXP.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">disallow_dangling</td>
+<td>
+
+
+    <div id="d2e199_getCaption_disallowDangling">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Will prevent captions from having the last word in a sentence start a new line. Last words will ALWAYS be kept on the same line, even if it breaks the characters_per_caption_line option.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">display_effects_speaker_as</td>
+<td>
+
+
+    <div id="d2e199_getCaption_displayEffectsSpeakerAs">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Determines what speaker name should used for sound effects.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">display_speaker_id</td>
+<td>
+
+
+    <div id="d2e199_getCaption_displaySpeakerId">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Determines the way speakers are identified in the captions. Choose &quot;no&quot; to not display speaker identities at all: &quot;&gt;&gt; example&quot; Choose &quot;number&quot; to display only the speaker number: &quot;&gt;&gt; Speaker 1: example&quot; Choose &quot;name&quot; to display the speaker name: &quot;&gt;&gt; John Doe: example&quot;. If you choose &quot;name&quot;, the speaker number will be displayed if the name is not available.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">iwp_name</td>
+<td>
+
+
+    <div id="d2e199_getCaption_iwpName">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+The named version of element list to generate the transcript from. If not specified, the transcript will be generated from the latest version.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">elementlist_version</td>
+<td>
+
+
+    <div id="d2e199_getCaption_elementlistVersion">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+The version of element list to generate the captions from. If not specified, the caption will be generated from the latest version. (ISO 8601 Date String)
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">emit_speaker_change_tokens_as</td>
+<td>
+
+
+    <div id="d2e199_getCaption_emitSpeakerChangeTokensAs">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Determine what characters to use to denote speaker changes.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">force_case</td>
+<td>
+
+
+    <div id="d2e199_getCaption_forceCase">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Force the contents of the captions to be all UPPER or lower case. If blank, the case of the captions is not changed.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">include_dfxp_metadata</td>
+<td>
+
+
+    <div id="d2e199_getCaption_includeDfxpMetadata">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+When true, and the caption format requested is DFXP, the jobs name, ID and language will be added to the DFXP metadata header. When false, these data are omitted from the header. Ignored if caption_format does not equal DFXP.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">layout_target_caption_length_ms</td>
+<td>
+
+
+    <div id="d2e199_getCaption_layoutTargetCaptionLengthMs">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description marked">
+Captions generated will, on average, be this duration. However, they may vary significantly based on other parameters you set.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">line_break_on_sentence</td>
+<td>
+
+
+    <div id="d2e199_getCaption_lineBreakOnSentence">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Inserts a line break in between sentences that are in the same caption.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">line_ending_format</td>
+<td>
+
+
+    <div id="d2e199_getCaption_lineEndingFormat">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Determine the end of line (EOL) character to use for the captions.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">lines_per_caption</td>
+<td>
+
+
+    <div id="d2e199_getCaption_linesPerCaption">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description marked">
+Number of lines to be displayed for each caption.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">mask_profanity</td>
+<td>
+
+
+    <div id="d2e199_getCaption_maskProfanity">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Replace profanity with asterisks.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">maximum_caption_duration</td>
+<td>
+
+
+    <div id="d2e199_getCaption_maximumCaptionDuration">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description marked">
+No captions longer than this (in milliseconds) will be produced. If not specified, there is no maximum.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">merge_gap_interval</td>
+<td>
+
+
+    <div id="d2e199_getCaption_mergeGapInterval">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description marked">
+Captions with a gap between them that is smaller than this (in milliseconds) will have their start and/or end times changed so there is no time gap between the captions.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">minimum_caption_length_ms</td>
+<td>
+
+
+    <div id="d2e199_getCaption_minimumCaptionLengthMs">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description marked">
+Extends the duration of short captions to the this minimum length. Additional time is taken from later caption blocks to meet this minimum time.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">minimum_gap_between_captions_ms</td>
+<td>
+
+
+    <div id="d2e199_getCaption_minimumGapBetweenCaptionsMs">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description marked">
+Adds a minimum time between captions such as there will always be some time between captions where no text is displayed. When captions are very close together, time will be removed from the caption duration to make the gap.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">qt_seamless</td>
+<td>
+
+
+    <div id="d2e199_getCaption_qtSeamless">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Does not put time gaps of any kind between caption blocks. Ignored if caption_format does not equal QT.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">remove_disfluencies</td>
+<td>
+
+
+    <div id="d2e199_getCaption_removeDisfluencies">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Remove verbal disfluencies from the generated transcript. Common disfluencies such as &quot;um&quot; and &quot;ah&quot; are removed while maintaining appropriate punctuation.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">remove_sounds_list</td>
+<td>
+
+
+    <div id="d2e199_getCaption_removeSoundsList">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    array[String]
+                </span>
+
+                    <div class="inner description marked">
+A list of sounds to not show in the caption. This is a JSON style list, and should look like [&quot;MUSIC&quot;, &quot;LAUGH&quot;]. Ignored if remove_sound_references is true.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">remove_sound_references</td>
+<td>
+
+
+    <div id="d2e199_getCaption_removeSoundReferences">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Remove ALL non-verbal sound and noise references from the generated transcript. Sounds and unidentified noises are depicted in the caption as [SOUND], [COUGH] and [NOISE]. If this parameter is set, these identifiers are omitted from the caption.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">replace_slang</td>
+<td>
+
+
+    <div id="d2e199_getCaption_replaceSlang">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Replace common slang terms from the generated transcript. Common replacements are &quot;want to&quot; for &quot;wanna&quot;, &quot;going to&quot; for &quot;gonna&quot;, etc.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">silence_max_ms</td>
+<td>
+
+
+    <div id="d2e199_getCaption_silenceMaxMs">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description marked">
+If there is a interval of silence in the middle of a sentence longer than this, then the caption will be split.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">single_speaker_per_caption</td>
+<td>
+
+
+    <div id="d2e199_getCaption_singleSpeakerPerCaption">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+When true, puts each speaker into its own caption. When false, more than one speaker may appear in a single caption.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">sound_boundaries</td>
+<td>
+
+
+    <div id="d2e199_getCaption_soundBoundaries">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    array[String]
+                </span>
+
+                    <div class="inner description marked">
+Specifies the characters to surround sound references with. The default will generate sound references that look like this: [MUSIC].
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">sound_threshold</td>
+<td>
+
+
+    <div id="d2e199_getCaption_soundThreshold">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description marked">
+Sound references that are longer than this threshold will be made their own caption entirely, and will not have any text included with them. If not set, Sound references will be included back to back with text no matter the duration of the sound.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">sound_tokens_by_caption</td>
+<td>
+
+
+    <div id="d2e199_getCaption_soundTokensByCaption">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+If true, all sound references will always be in their own caption. If false, more than one sound reference may appear in a single caption.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">sound_tokens_by_line</td>
+<td>
+
+
+    <div id="d2e199_getCaption_soundTokensByLine">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+If true, all sound references will always be in their own line. If false, more than one sound reference may appear in a single line.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">sound_tokens_by_caption_list</td>
+<td>
+
+
+    <div id="d2e199_getCaption_soundTokensByCaptionList">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    array[String]
+                </span>
+
+                    <div class="inner description marked">
+If non-empty, the specified sound references will always be in their own caption. If empty, more than one sound reference may appear in a single caption. Ignored if sound_tokens_by_caption is true.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">sound_tokens_by_line_list</td>
+<td>
+
+
+    <div id="d2e199_getCaption_soundTokensByLineList">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    array[String]
+                </span>
+
+                    <div class="inner description marked">
+If non-empty, the specified sound references will always be in their own line. If empty, more than one sound reference may appear in a single line. Ignored if sound_tokens_by_line is true.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">speaker_on_new_line</td>
+<td>
+
+
+    <div id="d2e199_getCaption_speakerOnNewLine">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+If true, a speaker change will cause a new caption to be made. If false, multiple speakers may appear in a single caption.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">srt_format</td>
+<td>
+
+
+    <div id="d2e199_getCaption_srtFormat">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+If the caption format is SRT, determines what the caption blocks will look like. The default, prints caption blocks that look like this:
+
+  1:
+  00:00:06,060 --&gt; 00:00:16,060
+  This is the caption text.
+
+You can alter the caption block by re-arranging or removing the substitution string values, shown enclosed in braces &quot;{}&quot; in the default value below. Substitution strings may used more than once if desired. Any text that is not a substitution string will be displayed as written. To add new lines, include a \n. Note, you may need to escape the \n with an extra backslash when encoding the request.
+
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">strip_square_brackets</td>
+<td>
+
+
+    <div id="d2e199_getCaption_stripSquareBrackets">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Removes all square brackets like &#39;[&#39; or &#39;]&#39; from captions. By default square brackets surround sound references like &#39;[MUSIC]&#39;, but they may exist as part of the caption text as well.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">utf8_mark</td>
+<td>
+
+
+    <div id="d2e199_getCaption_utf8Mark">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Adds a utf8 bytemark to the beginning of the caption. This should only be used if the system you are loading the caption files into needs a byte marker. The vast majority of systems do not.
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">replace_english_spelling</td>
+<td>
+
+
+    <div id="d2e199_getCaption_replaceEnglishSpelling">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+Replaces English spelling with location accurate spelling. i.e. Color --&gt; Colour
+
+A: American
+
+B: British
+
+Z: British ize
+
+U: Australian
+
+C: Canadian
+
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3 id="examples-Job-getCaption-title-200"></h3>
+                            <p id="examples-Job-getCaption-description-200" class="marked"></p>
+                            <script>
+                              var responseJob200_description = `Success`;
+                              var responseJob200_description_break = responseJob200_description.indexOf('\n');
+                              if (responseJob200_description_break == -1) {
+                                $("#examples-Job-getCaption-title-200").text("Status: 200 - " + responseJob200_description);
+                              } else {
+                                $("#examples-Job-getCaption-title-200").text("Status: 200 - " + responseJob200_description.substring(0, responseJob200_description_break));
+                                $("#examples-Job-getCaption-description-200").html(responseJob200_description.substring(responseJob200_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Job-getCaption-200" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Job-getCaption-200-schema">Schema</a>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Job-getCaption-200-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Job-getCaption-200-schema">
+                                  <div id="responses-Job-getCaption-schema-200" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Success",
+  "content" : {
+    "text/plain" : {
+      "schema" : {
+        "type" : "string"
+      }
+    },
+    "application/json" : {
+      "schema" : {
+        "type" : "object"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Job-getCaption-200-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Job-getCaption-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Job-getCaption-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+                            <h3 id="examples-Job-getCaption-title-400"></h3>
+                            <p id="examples-Job-getCaption-description-400" class="marked"></p>
+                            <script>
+                              var responseJob400_description = `An error occurred`;
+                              var responseJob400_description_break = responseJob400_description.indexOf('\n');
+                              if (responseJob400_description_break == -1) {
+                                $("#examples-Job-getCaption-title-400").text("Status: 400 - " + responseJob400_description);
+                              } else {
+                                $("#examples-Job-getCaption-title-400").text("Status: 400 - " + responseJob400_description.substring(0, responseJob400_description_break));
+                                $("#examples-Job-getCaption-description-400").html(responseJob400_description.substring(responseJob400_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Job-getCaption-400" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Job-getCaption-400-schema">Schema</a>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Job-getCaption-400-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Job-getCaption-400-schema">
+                                  <div id="responses-Job-getCaption-schema-400" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "An error occurred",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/ErrorResponse"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Job-getCaption-400-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Job-getCaption-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Job-getCaption-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Job-newJob">
                       <article id="api-Job-newJob-0" data-group="User" data-name="newJob" data-version="0">
                         <div class="pull-left">
@@ -5262,6 +7154,539 @@ $(document).ready(function() {
                                     </script>
                                   </div>
                                   <input id='responses-Job-performTranscription-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Job-performTranslation">
+                      <article id="api-Job-performTranslation-0" data-group="User" data-name="performTranslation" data-version="0">
+                        <div class="pull-left">
+                          <h1>performTranslation</h1>
+                          <p></p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Request that orders a new Translation language for a video that has been previously Transcribed and/or Translated. The New Job ID and job target language will be returned upon completion.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/job/perform_translation</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Job-performTranslation-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Job-performTranslation-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Job-performTranslation-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Job-performTranslation-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Job-performTranslation-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Job-performTranslation-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Job-performTranslation-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Job-performTranslation-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Job-performTranslation-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Job-performTranslation-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Job-performTranslation-0-python">Python</a></li>
+                          <li class=""><a href="#examples-Job-performTranslation-0-rust">Rust</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Job-performTranslation-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X POST \
+ \
+ -H "Accept: application/json" \
+ "https://api.cielo24.com/api/job/perform_translation?v=56&job_id=0fbd6015910e42dca25a863c4925d77c&target_languages=fr,de&approve_uplevel=true"
+</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Job-performTranslation-0-java">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
+import org.openapitools.client.auth.*;
+import org.openapitools.client.model.*;
+import org.openapitools.client.api.JobApi;
+
+import java.io.File;
+import java.util.*;
+
+public class JobApiExample {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure API key authorization: ApiKeyAuth
+        ApiKeyAuth ApiKeyAuth = (ApiKeyAuth) defaultClient.getAuthentication("ApiKeyAuth");
+        ApiKeyAuth.setApiKey("YOUR API KEY");
+        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+        //ApiKeyAuth.setApiKeyPrefix("Token");
+
+        // Create an instance of the API class
+        JobApi apiInstance = new JobApi();
+        Integer v = 56; // Integer | 
+        String jobId = 0fbd6015910e42dca25a863c4925d77c; // String | 
+        String targetLanguages = fr,de; // String | The language(s) being ordered (Any RFC 5646 language code) separated by comma (,)
+        String approveUplevel = true; // String | 
+
+        try {
+            PerformTranslationResponse result = apiInstance.performTranslation(v, jobId, targetLanguages, approveUplevel);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling JobApi#performTranslation");
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Job-performTranslation-0-android">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.api.JobApi;
+
+public class JobApiExample {
+    public static void main(String[] args) {
+        JobApi apiInstance = new JobApi();
+        Integer v = 56; // Integer | 
+        String jobId = 0fbd6015910e42dca25a863c4925d77c; // String | 
+        String targetLanguages = fr,de; // String | The language(s) being ordered (Any RFC 5646 language code) separated by comma (,)
+        String approveUplevel = true; // String | 
+
+        try {
+            PerformTranslationResponse result = apiInstance.performTranslation(v, jobId, targetLanguages, approveUplevel);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling JobApi#performTranslation");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Job-performTranslation-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Job-performTranslation-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure API key authorization: (authentication scheme: ApiKeyAuth)
+[apiConfig setApiKey:@"YOUR_API_KEY" forApiKeyIdentifier:@"api_token"];
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+//[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"api_token"];
+
+
+// Create an instance of the API class
+JobApi *apiInstance = [[JobApi alloc] init];
+Integer *v = 56; //  (default to 1)
+String *jobId = 0fbd6015910e42dca25a863c4925d77c; //  (default to null)
+String *targetLanguages = fr,de; // The language(s) being ordered (Any RFC 5646 language code) separated by comma (,) (default to null)
+String *approveUplevel = true; //  (optional) (default to null)
+
+[apiInstance performTranslationWith:v
+    jobId:jobId
+    targetLanguages:targetLanguages
+    approveUplevel:approveUplevel
+              completionHandler: ^(PerformTranslationResponse output, NSError* error) {
+    if (output) {
+        NSLog(@"%@", output);
+    }
+    if (error) {
+        NSLog(@"Error: %@", error);
+    }
+}];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-performTranslation-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var Cielo24 = require('cielo24');
+var defaultClient = Cielo24.ApiClient.instance;
+
+// Configure API key authorization: ApiKeyAuth
+var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
+ApiKeyAuth.apiKey = "YOUR API KEY";
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//ApiKeyAuth.apiKeyPrefix['api_token'] = "Token";
+
+// Create an instance of the API class
+var api = new Cielo24.JobApi()
+var v = 56; // {Integer} 
+var jobId = 0fbd6015910e42dca25a863c4925d77c; // {String} 
+var targetLanguages = fr,de; // {String} The language(s) being ordered (Any RFC 5646 language code) separated by comma (,)
+var opts = {
+  'approveUplevel': true // {String} 
+};
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.performTranslation(v, jobId, targetLanguages, opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Job-performTranslation-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Job-performTranslation-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using cielo24.Api;
+using cielo24.Client;
+using cielo24.Model;
+
+namespace Example
+{
+    public class performTranslationExample
+    {
+        public void main()
+        {
+            // Configure API key authorization: ApiKeyAuth
+            Configuration.Default.ApiKey.Add("api_token", "YOUR_API_KEY");
+            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+            // Configuration.Default.ApiKeyPrefix.Add("api_token", "Bearer");
+
+            // Create an instance of the API class
+            var apiInstance = new JobApi();
+            var v = 56;  // Integer |  (default to 1)
+            var jobId = 0fbd6015910e42dca25a863c4925d77c;  // String |  (default to null)
+            var targetLanguages = fr,de;  // String | The language(s) being ordered (Any RFC 5646 language code) separated by comma (,) (default to null)
+            var approveUplevel = true;  // String |  (optional)  (default to null)
+
+            try {
+                PerformTranslationResponse result = apiInstance.performTranslation(v, jobId, targetLanguages, approveUplevel);
+                Debug.WriteLine(result);
+            } catch (Exception e) {
+                Debug.Print("Exception when calling JobApi.performTranslation: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-performTranslation-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: ApiKeyAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setApiKey('api_token', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// OpenAPITools\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('api_token', 'Bearer');
+
+// Create an instance of the API class
+$api_instance = new OpenAPITools\Client\Api\JobApi();
+$v = 56; // Integer | 
+$jobId = 0fbd6015910e42dca25a863c4925d77c; // String | 
+$targetLanguages = fr,de; // String | The language(s) being ordered (Any RFC 5646 language code) separated by comma (,)
+$approveUplevel = true; // String | 
+
+try {
+    $result = $api_instance->performTranslation($v, $jobId, $targetLanguages, $approveUplevel);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling JobApi->performTranslation: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-performTranslation-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::OPenAPIClient::Configuration;
+use WWW::OPenAPIClient::JobApi;
+
+# Configure API key authorization: ApiKeyAuth
+$WWW::OPenAPIClient::Configuration::api_key->{'api_token'} = 'YOUR_API_KEY';
+# uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+#$WWW::OPenAPIClient::Configuration::api_key_prefix->{'api_token'} = "Bearer";
+
+# Create an instance of the API class
+my $api_instance = WWW::OPenAPIClient::JobApi->new();
+my $v = 56; # Integer | 
+my $jobId = 0fbd6015910e42dca25a863c4925d77c; # String | 
+my $targetLanguages = fr,de; # String | The language(s) being ordered (Any RFC 5646 language code) separated by comma (,)
+my $approveUplevel = true; # String | 
+
+eval {
+    my $result = $api_instance->performTranslation(v => $v, jobId => $jobId, targetLanguages => $targetLanguages, approveUplevel => $approveUplevel);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling JobApi->performTranslation: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-performTranslation-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import openapi_client
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Configure API key authorization: ApiKeyAuth
+openapi_client.configuration.api_key['api_token'] = 'YOUR_API_KEY'
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# openapi_client.configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Create an instance of the API class
+api_instance = openapi_client.JobApi()
+v = 56 # Integer |  (default to 1)
+jobId = 0fbd6015910e42dca25a863c4925d77c # String |  (default to null)
+targetLanguages = fr,de # String | The language(s) being ordered (Any RFC 5646 language code) separated by comma (,) (default to null)
+approveUplevel = true # String |  (optional) (default to null)
+
+try:
+    api_response = api_instance.perform_translation(v, jobId, targetLanguages, approveUplevel=approveUplevel)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling JobApi->performTranslation: %s\n" % e)</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-performTranslation-0-rust">
+                              <pre class="prettyprint"><code class="language-rust">extern crate JobApi;
+
+pub fn main() {
+    let v = 56; // Integer
+    let jobId = 0fbd6015910e42dca25a863c4925d77c; // String
+    let targetLanguages = fr,de; // String
+    let approveUplevel = true; // String
+
+    let mut context = JobApi::Context::default();
+    let result = client.performTranslation(v, jobId, targetLanguages, approveUplevel, &context).wait();
+
+    println!("{:?}", result);
+}
+</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Scopes</h2>
+                          <table>
+                            
+                          </table>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">v*</td>
+<td>
+
+
+    <div id="d2e199_performTranslation_v">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">job_id*</td>
+<td>
+
+
+    <div id="d2e199_performTranslation_jobId">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">target_languages*</td>
+<td>
+
+
+    <div id="d2e199_performTranslation_targetLanguages">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+                    <div class="inner description marked">
+The language(s) being ordered (Any RFC 5646 language code) separated by comma (,)
+                    </div>
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">approve_uplevel</td>
+<td>
+
+
+    <div id="d2e199_performTranslation_approveUplevel">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3 id="examples-Job-performTranslation-title-201"></h3>
+                            <p id="examples-Job-performTranslation-description-201" class="marked"></p>
+                            <script>
+                              var responseJob201_description = `Success`;
+                              var responseJob201_description_break = responseJob201_description.indexOf('\n');
+                              if (responseJob201_description_break == -1) {
+                                $("#examples-Job-performTranslation-title-201").text("Status: 201 - " + responseJob201_description);
+                              } else {
+                                $("#examples-Job-performTranslation-title-201").text("Status: 201 - " + responseJob201_description.substring(0, responseJob201_description_break));
+                                $("#examples-Job-performTranslation-description-201").html(responseJob201_description.substring(responseJob201_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Job-performTranslation-201" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Job-performTranslation-201-schema">Schema</a>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Job-performTranslation-201-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Job-performTranslation-201-schema">
+                                  <div id="responses-Job-performTranslation-schema-201" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Success",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/PerformTranslationResponse"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Job-performTranslation-201-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Job-performTranslation-schema-201');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Job-performTranslation-201-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+                            <h3 id="examples-Job-performTranslation-title-400"></h3>
+                            <p id="examples-Job-performTranslation-description-400" class="marked"></p>
+                            <script>
+                              var responseJob400_description = `An error occurred`;
+                              var responseJob400_description_break = responseJob400_description.indexOf('\n');
+                              if (responseJob400_description_break == -1) {
+                                $("#examples-Job-performTranslation-title-400").text("Status: 400 - " + responseJob400_description);
+                              } else {
+                                $("#examples-Job-performTranslation-title-400").text("Status: 400 - " + responseJob400_description.substring(0, responseJob400_description_break));
+                                $("#examples-Job-performTranslation-description-400").html(responseJob400_description.substring(responseJob400_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Job-performTranslation-400" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Job-performTranslation-400-schema">Schema</a>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Job-performTranslation-400-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Job-performTranslation-400-schema">
+                                  <div id="responses-Job-performTranslation-schema-400" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "An error occurred",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/ErrorResponse"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Job-performTranslation-400-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Job-performTranslation-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Job-performTranslation-400-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
                         </article>
