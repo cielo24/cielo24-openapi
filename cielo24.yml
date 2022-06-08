@@ -1,0 +1,491 @@
+openapi: "3.0.0"
+info:
+  description: "The cielo24 Web Services Platform API allows developers to easily integrate transcription, captioning and keyword extraction into their applications without having to use a manual web portal."
+  version: "1.0.0"
+  title: "Cielo24"
+  termsOfService: "https://cielo24.com/terms/"
+  contact:
+    email: "devs@cielo24.com"
+servers:
+- url: "https://api.cielo24.com/api"
+tags:
+- name: "account"
+  description: "All parameters are expected to be safely quoted as is customary for GET query strings. For each session, you will be given an api access token. This token identifies the session, and all additional accesses are made using it. Api tokens expire after the user has been inactive for more than one hour."
+- name: "job"
+  description: "All job control tasks return a task ID which can be queried at any time using task status for information."
+paths:
+  /account/login:
+    post:
+      security: []
+      operationId: login
+      tags:
+      - account
+      description: "Login to the cielo24 API to obtain an API access token for use when calling other methods. Optional arguments may be passed either as HTTP headers or query string parameters. Required arguments must be passed as query string parameters."
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        400:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /account/logout:
+    post:
+      operationId: logout
+      tags:
+      - account
+      description: "Logout of the current session, invalidating the API token."
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      responses:
+        204:
+          description: "Success"
+        400:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /account/get_settings:
+    get:
+      operationId: get_settings
+      tags:
+      - account
+      description: "Get Account Settings"
+      parameters:
+        - name: v
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        200:
+          description: "Test"
+  /account/verify_key:
+    get:
+      operationId: verify_key
+      tags:
+      - account
+      description: "Test Auth"
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      responses:
+        200:
+          description: "Test"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifyKeyResponse"
+
+  /job/new:
+    post:
+      operationId: new_job
+      tags:
+      - job
+      description: "Create a new job. A job is a container into which you can upload media and request that transcription be performed. Creating a job is prerequisite for virtually all other methods."
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewJobBody"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewJobResponse"
+        400:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /job/add_media:
+    get:
+      operationId: add_media_url
+      tags:
+      - job
+      description: "Add a piece of media to an existing job using a public media url. A job may only have a single piece of media associated with it, attempting to add additional media will return an error code."
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      - name: job_id
+        in: query
+        required: true
+        schema:
+          type: string
+          example: 0fbd6015910e42dca25a863c4925d77c
+      - name: media_url
+        in: query
+        required: true
+        schema:
+          type: string
+          example: http://www.domain.com/video.mp4
+      - name: is_duplicate
+        in: query
+        schema:
+          type: string
+          description: "Allows creating multiple jobs with the same media_url"
+          default: "false"
+          enum: ["true", "false"]
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddMediaResponse"
+        400:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: add_media_file
+      tags:
+      - job
+      description: "Add a piece of media to an existing job using a local file. No content-type should be included in the HTTP header. The media should be uploaded as raw binary, no encoding (base64, hex, etc) is required. Chunk-transfer encoding is NOT supported. File size is limited to 10 gb"
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      - name: job_id
+        in: query
+        required: true
+        schema:
+          type: string
+          example: 0fbd6015910e42dca25a863c4925d77c
+      - name: is_duplicate
+        in: query
+        schema:
+          type: string
+          description: "Allows creating multiple jobs with the same media_url"
+          default: "false"
+          enum: ["true", "false"]
+      - name: Content-Length
+        in: header
+        required: true
+        schema:
+          type: integer
+          maximum: 10737418239
+      requestBody:
+        required: true
+        content:
+          video/*:
+            schema:
+              type: string
+              format: binary
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddMediaResponse"
+        400:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /job/perform_transcription:
+    post:
+      operationId: perform_transcription
+      tags:
+      - job
+      description: "Request that transcription be performed on the specified job. A callback URL, if specified, will be called when the transcription is complete. See [callback documentation](https://cielo24.readthedocs.io/en/latest/basics.html#callbacks-label) for details."
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PerformTranscriptionBody"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerformTranscriptionResponse"
+        400:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /job/authorize:
+    post:
+      operationId: authorize_job
+      tags:
+      - job
+      description: 'Authorize an existing job. If your account has the "customer authorization" feature enabled (it is not enabled by default) jobs you create will be held in the "Authorizing" state until you call this method. Calling this method on a job that is not the "Authorizing" state has no effect and will return success. Please contact support@cielo24.com to enable the "customer authorization" feature.'
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      - name: job_id
+        in: query
+        required: true
+        schema:
+          type: string
+          example: 0fbd6015910e42dca25a863c4925d77c
+      responses:
+        200:
+          description: "Success"
+        400:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    LoginBody:
+      type: object
+      properties:
+        username:
+          type: string
+          description: "The username associated with this account"
+        password:
+          type: string
+          description: "The password associated with this account"
+          format: password
+        securekey:
+          type: string
+          description: "A long term security key generated via generate_api_key"
+    LoginResponse:
+      type: object
+      properties:
+        api_token:
+          type: string
+    VerifyKeyResponse:
+      type: object
+      properties:
+        name:
+          type: string
+    NewJobBody:
+      type: object
+      properties:
+        job_name:
+          type: string
+          description: "A human readable identifier for the job"
+        language:
+          type: string
+          description: "Native job language"
+          example: en (Any RFC 5646 language code)
+        external_id:
+          type: string
+          description: "An identifier you want to associate with this job"
+          example: 12345
+        username:
+          type: string
+          description: "Create the job in specified sub-account"
+          example: my_sub_account
+        requestor:
+          type: string
+          description: "An requestor you want to associate with this job"
+          example: test_requestor
+        reference:
+          type: string
+          description: "An reference you want to associate with this job"
+          example: test_reference
+        expected_speakers:
+          type: integer
+          description: "Amount of speakers that the video will have"
+          example: 40
+        is_duplicate:
+          type: string
+          description: "Allows creating multiple jobs with the same external_id"
+          default: "false"
+          enum: ["true", "false"]
+    NewJobResponse:
+      type: object
+      properties:
+        JobId:
+          type: string
+          example: 0fbd6015910e42dca25a863c4925d77c
+        TaskId:
+          type: string
+          example: f79fcf4cccfe4402826190ca13a7c0d4
+    AddMediaResponse:
+      type: object
+      properties:
+        TaskId:
+          type: string
+          example: f79fcf4cccfe4402826190ca13a7c0d4
+    PerformTranscriptionBody:
+      type: object
+      required:
+      - job_id
+      - transcription_fidelity
+      - priority
+      properties:
+        job_id:
+          type: string
+          description: "The ID of the job"
+          example: 0fbd6015910e42dca25a863c4925d77c
+        transcription_fidelity:
+          type: string
+          description: "The desired fidelity of the transcription"
+          enum: [MECHANICAL, PREMIUM, PROFESSIONAL]
+        priority:
+          type: string
+          description: "The desired priority of the transcription"
+          enum: [STANDARD, PRIORITY]
+        callback_url:
+          type: string
+          description: "A URL with query string which will be called on completion. If submitting the callback_url as a query string parameter, rather than a value in the POST data, the callback_url should be URL encoded. The callback URL can contain tags that will be replaced with job specific data when the callback is called. Below is the list of tags that are supported: {job_id}, {job_name}, {elementlist_version}, {iwp_name} (The Interim Work Product name associated with this
+          ElementList version)"
+          example: http://www.domain.com/path
+        options:
+          type: string
+          description: "A job options json. See JobOptions object for details."
+          example: '{"notes": "test"}'
+        target_language:
+          type: string
+          description: "An RFC 5646 language code to translate this job into. If not specified, then no translation will be performed. If specified, but the language code specified matches the language code on the job request, then no translation will be performed."
+          example: en (Any RFC 5646 language code)
+        turnaround_hours:
+          type: integer
+          description: "The number of hours after submission that the job will be returned. If not specified, it will be set to a default based on the value of the priority parameter. The defaults are 24 and 48 for the PRIORITY and STANDARD priorities respectively. If you request a smaller number of hours than the default for the priority you have selected, the priority will be automatically changed. For example if you request a turnaround_hours of 16 with a priority of STANDARD, the priority will be automatically, and silently, changed to PRIORITY."
+          example: 36
+    PerformTranscriptionResponse:
+      type: object
+      properties:
+        TaskId:
+          type: string
+    JobOptions:
+      type: object
+      properties:
+        customer_approval_steps:
+          type: array
+          description: "Requires your approval of a job at specified points in the workflow. When the job is ready for approval you will be emailed a link that will take you to a web based tool you can use to view, edit and approve the job. You may request approval at two points in the workflow: before translation and before the job is returned."
+          default: []
+          items:
+            type: string
+            enum: [TRANSLATION, RETURN]
+        customer_approval_tool:
+          type: string
+          description: "Determines which web based tool to use for viewing, editing and approving jobs."
+          default: CIELO24
+          enum: [AMARA, CIELO24]
+        custom_metadata:
+          type: object
+          description: "A JSON dictionary of key value pairs. These will be used as substitution strings when building the callback URL and custom DFXP caption header."
+          example: '{"key":"value"}'
+        notes:
+          type: string
+          description: "Allows you to provide text that will be displayed to the transcriber when the job is processed. An HTML included will be escaped."
+          maxLength: 1000
+          default: ""
+        return_iwp:
+          type: array
+          description: "Allows you to receive additional callbacks when interim versions of the job are completed. If you specified a callback_url, then a callback will sent for FINAL regardless of the value of this option."
+          default: []
+          items:
+            $ref: "#/components/schemas/IWPEnum"
+        generate_media_intelligence_iwp:
+          type: array
+          description: "Requests that media intelligence be generated for the specified interim/final versions of the transcript. Media intelligence data is added to the ElementList and can be retrieve using the get_elementlist API call. See [ElementList](https://cielo24.readthedocs.io/en/latest/output_formats/elementlist.html#media-intelligence-label) for details."
+          default: []
+          items:
+            $ref: "#/components/schemas/IWPEnum"
+        speaker_id:
+          type: string
+          description: "Requests that speaker names be identified."
+          default: "false"
+          enum: ["true", "false"]
+        audio_description:
+          type: string
+          description: "Requests that all noises and sounds be identified."
+          default: "false"
+          enum: ["true", "false"]
+        on_screen_text:
+          type: string
+          description: "Requests that any text that appears in the media be added to the transcription."
+          default: "false"
+          enum: ["true", "false"]
+        music_lyrics:
+          type: string
+          description: "Requests that lyrics to songs be transcribed instead of labeled [MUSIC]."
+          default: "false"
+          enum: ["true", "false"]
+        custom_special_handling:
+          type: string
+          description: "Requests that transcribers follow submitted instruction set."
+          default: "false"
+          enum: ["true", "false"]
+    IWPEnum:
+      type: string
+      enum: [PREMIUM, INTERIM_PROFESSIONAL, PROFESSIONAL, SPEAKER_ID, FINAL, MECHANICAL, CUSTOMER_APPROVED_RETURN, CUSTOMER_APPROVED_TRANSLATION]
+    ErrorResponse:
+      type: object
+      properties:
+        ErrorType:
+          type: string
+        ErrorComment:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_token
+security:
+  - ApiKeyAuth: []
