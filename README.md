@@ -1,7 +1,7 @@
 # Cielo24 OpenApi
 
 ## Documentation
-The OpenApi documentation for Cielo24 can be found at [/docs/index.html](doc_md/README.md)
+The OpenApi documentation for Cielo24 can be found at [/doc_md/README.md](doc_md/README.md)
 
 <details>
 <summary>API Integration Diagram</summary>
@@ -20,6 +20,6 @@ ada, ada-server, android, apache2, apex, asciidoc, aspnetcore, avro-schema, bash
 
 ## Pre-generated clients:
 - [Python 3.6+](https://github.com/cielo24/cielo24-python)
-- Java (WIP)
-- C# (WIP)
-- Node.js (WIP)
+- [Java](https://github.com/cielo24/cielo24-java)
+- [C#](https://github.com/cielo24/cielo24-csharp)
+- [Node.js](https://github.com/cielo24/cielo24-js)

@@ -1,0 +1,17 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "openapi-generator generate --package-name=cielo24 -g html2 -i cielo24.yml -o doc_html && openapi-generator generate --package-name=cielo24 -g markdown -i cielo24.yml -o doc_md",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

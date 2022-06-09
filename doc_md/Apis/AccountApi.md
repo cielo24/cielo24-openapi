@@ -12,7 +12,7 @@ All URIs are relative to *https://api.cielo24.com/api*
 
 <a name="getSettings"></a>
 # **getSettings**
-> getSettings(v)
+> Object getSettings(v)
 
 
 
@@ -26,7 +26,7 @@ All URIs are relative to *https://api.cielo24.com/api*
 
 ### Return type
 
-null (empty response body)
+**Object**
 
 ### Authorization
 
@@ -35,7 +35,7 @@ null (empty response body)
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 <a name="login"></a>
 # **login**

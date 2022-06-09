@@ -85,6 +85,10 @@ paths:
       responses:
         200:
           description: "Test"
+          content:
+            application/json:
+              schema:
+                type: object
   /account/verify_key:
     get:
       operationId: verify_key

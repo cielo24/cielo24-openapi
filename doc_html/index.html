@@ -973,8 +973,8 @@ ul.nav-tabs {
     "customer_approval_tool" : {
       "type" : "string",
       "description" : "Determines which web based tool to use for viewing, editing and approving jobs.",
-      "enum" : [ "AMARA", "CIELO24" ],
-      "default" : "CIELO24"
+      "default" : "CIELO24",
+      "enum" : [ "AMARA", "CIELO24" ]
     },
     "custom_metadata" : {
       "type" : "object",
@@ -1003,32 +1003,32 @@ ul.nav-tabs {
     "speaker_id" : {
       "type" : "string",
       "description" : "Requests that speaker names be identified.",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     },
     "audio_description" : {
       "type" : "string",
       "description" : "Requests that all noises and sounds be identified.",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     },
     "on_screen_text" : {
       "type" : "string",
       "description" : "Requests that any text that appears in the media be added to the transcription.",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     },
     "music_lyrics" : {
       "type" : "string",
       "description" : "Requests that lyrics to songs be transcribed instead of labeled [MUSIC].",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     },
     "custom_special_handling" : {
       "type" : "string",
       "description" : "Requests that transcribers follow submitted instruction set.",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     }
   }
 };
@@ -1098,8 +1098,8 @@ ul.nav-tabs {
     "is_duplicate" : {
       "type" : "string",
       "description" : "Allows creating multiple jobs with the same external_id",
-      "enum" : [ "true", "false" ],
-      "default" : "false"
+      "default" : "false",
+      "enum" : [ "true", "false" ]
     }
   }
 };
@@ -1303,6 +1303,7 @@ ul.nav-tabs {
                           <div class="tab-pane active" id="examples-Account-getSettings-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET \
  \
+ -H "Accept: application/json" \
  "https://api.cielo24.com/api/account/get_settings?v=56"
 </code></pre>
                           </div>
@@ -1330,7 +1331,8 @@ public class AccountApiExample {
         Integer v = 56; // Integer | 
 
         try {
-            apiInstance.getSettings(v);
+            Object result = apiInstance.getSettings(v);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling AccountApi#getSettings");
             e.printStackTrace();
@@ -1349,7 +1351,8 @@ public class AccountApiExample {
         Integer v = 56; // Integer | 
 
         try {
-            apiInstance.getSettings(v);
+            Object result = apiInstance.getSettings(v);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling AccountApi#getSettings");
             e.printStackTrace();
@@ -1375,7 +1378,10 @@ AccountApi *apiInstance = [[AccountApi alloc] init];
 Integer *v = 56; //  (default to 1)
 
 [apiInstance getSettingsWith:v
-              completionHandler: ^(NSError* error) {
+              completionHandler: ^(Object output, NSError* error) {
+    if (output) {
+        NSLog(@"%@", output);
+    }
     if (error) {
         NSLog(@"Error: %@", error);
     }
@@ -1401,7 +1407,7 @@ var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully.');
+    console.log('API called successfully. Returned data: ' + data);
   }
 };
 api.getSettings(v, callback);
@@ -1434,7 +1440,8 @@ namespace Example
             var v = 56;  // Integer |  (default to 1)
 
             try {
-                apiInstance.getSettings(v);
+                Object result = apiInstance.getSettings(v);
+                Debug.WriteLine(result);
             } catch (Exception e) {
                 Debug.Print("Exception when calling AccountApi.getSettings: " + e.Message );
             }
@@ -1458,7 +1465,8 @@ $api_instance = new OpenAPITools\Client\Api\AccountApi();
 $v = 56; // Integer | 
 
 try {
-    $api_instance->getSettings($v);
+    $result = $api_instance->getSettings($v);
+    print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling AccountApi->getSettings: ', $e->getMessage(), PHP_EOL;
 }
@@ -1480,7 +1488,8 @@ my $api_instance = WWW::OPenAPIClient::AccountApi->new();
 my $v = 56; # Integer | 
 
 eval {
-    $api_instance->getSettings(v => $v);
+    my $result = $api_instance->getSettings(v => $v);
+    print Dumper($result);
 };
 if ($@) {
     warn "Exception when calling AccountApi->getSettings: $@\n";
@@ -1504,7 +1513,8 @@ api_instance = openapi_client.AccountApi()
 v = 56 # Integer |  (default to 1)
 
 try:
-    api_instance.get_settings(v)
+    api_response = api_instance.get_settings(v)
+    pprint(api_response)
 except ApiException as e:
     print("Exception when calling AccountApi->getSettings: %s\n" % e)</code></pre>
                             </div>
@@ -1579,12 +1589,56 @@ pub fn main() {
 
 
                             <ul id="responses-detail-Account-getSettings-200" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Account-getSettings-200-schema">Schema</a>
+                                </li>
+
+
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Account-getSettings-200-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Account-getSettings-200-schema">
+                                  <div id="responses-Account-getSettings-schema-200" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Test",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "object"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Account-getSettings-200-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Account-getSettings-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Account-getSettings-200-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
                         </article>
                       </div>
