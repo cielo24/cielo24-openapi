@@ -3,6 +3,7 @@ Apis/JobApi.md
 Models/AddMediaResponse.md
 Models/ErrorResponse.md
 Models/IWPEnum.md
+Models/JobInfoResponse.md
 Models/JobOptions.md
 Models/LoginBody.md
 Models/LoginResponse.md

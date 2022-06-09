@@ -870,6 +870,94 @@ ul.nav-tabs {
   "type" : "string",
   "enum" : [ "PREMIUM", "INTERIM_PROFESSIONAL", "PROFESSIONAL", "SPEAKER_ID", "FINAL", "MECHANICAL", "CUSTOMER_APPROVED_RETURN", "CUSTOMER_APPROVED_TRANSLATION" ]
 };
+    defs["JobInfoResponse"] = {
+  "type" : "object",
+  "properties" : {
+    "JobId" : {
+      "type" : "string",
+      "example" : "0fbd6015910e42dca25a863c4925d77c"
+    },
+    "JobName" : {
+      "type" : "string",
+      "example" : "sample_job_name"
+    },
+    "MediaLengthSeconds" : {
+      "type" : "number",
+      "example" : 65.3
+    },
+    "ExternalId" : {
+      "type" : "string",
+      "description" : "Depends on third-party integrations.",
+      "example" : "12345"
+    },
+    "Priority" : {
+      "type" : "string",
+      "example" : "PRIORITY",
+      "enum" : [ "STANDARD", "PRIORITY" ]
+    },
+    "Fidelity" : {
+      "type" : "string",
+      "example" : "PREMIUM",
+      "enum" : [ "MECHANICAL", "PREMIUM", "PROFESSIONAL" ]
+    },
+    "JobStatus" : {
+      "type" : "string",
+      "example" : "In Process",
+      "enum" : [ "Authorizing", "Pending", "In Process", "Complete", "Media Failure", "Reviewing" ]
+    },
+    "Options" : {
+      "$ref" : "#/components/schemas/JobOptions"
+    },
+    "ReturnTargets" : {
+      "type" : "object"
+    },
+    "SourceLanguage" : {
+      "type" : "string",
+      "description" : "RFC 5646 Language Code",
+      "example" : "en"
+    },
+    "TargetLanguage" : {
+      "type" : "string",
+      "description" : "RFC 5646 Language Code",
+      "example" : "fr"
+    },
+    "CreationDate" : {
+      "type" : "string",
+      "description" : "ISO 8601 Date String",
+      "example" : "2014-07-31T12:35:52.324389"
+    },
+    "StartDate" : {
+      "type" : "string",
+      "description" : "ISO 8601 Date String",
+      "example" : "2014-07-31T12:35:52.324389"
+    },
+    "DueDate" : {
+      "type" : "string",
+      "description" : "ISO 8601 Date String",
+      "example" : "2014-07-31T12:35:52.324389"
+    },
+    "CompletedDate" : {
+      "type" : "string",
+      "description" : "ISO 8601 Date String",
+      "example" : "2014-07-31T12:35:52.324389"
+    },
+    "ReturnDate" : {
+      "type" : "string",
+      "description" : "ISO 8601 Date String",
+      "example" : "2014-07-31T12:35:52.324389"
+    },
+    "AuthorizationDate" : {
+      "type" : "string",
+      "description" : "ISO 8601 Date String",
+      "example" : "2014-07-31T12:35:52.324389"
+    },
+    "JobDifficulty" : {
+      "type" : "string",
+      "example" : "Good",
+      "enum" : [ "Good", "Bad", "Unknown" ]
+    }
+  }
+};
     defs["JobOptions"] = {
   "type" : "object",
   "properties" : {
@@ -894,10 +982,7 @@ ul.nav-tabs {
       "example" : "{\"key\":\"value\"}"
     },
     "notes" : {
-      "maxLength" : 1000,
-      "type" : "string",
-      "description" : "Allows you to provide text that will be displayed to the transcriber when the job is processed. An HTML included will be escaped.",
-      "default" : ""
+      "description" : "Allows you to provide text that will be displayed to the transcriber when the job is processed. An HTML included will be escaped."
     },
     "return_iwp" : {
       "type" : "array",
@@ -1147,6 +1232,9 @@ ul.nav-tabs {
                     </li>
                     <li data-group="Job" data-name="getCaption" class="">
                       <a href="#api-Job-getCaption">getCaption</a>
+                    </li>
+                    <li data-group="Job" data-name="jobInfo" class="">
+                      <a href="#api-Job-jobInfo">jobInfo</a>
                     </li>
                     <li data-group="Job" data-name="newJob" class="">
                       <a href="#api-Job-newJob">newJob</a>
@@ -6139,6 +6227,477 @@ C: Canadian
                                     </script>
                                   </div>
                                   <input id='responses-Job-getCaption-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Job-jobInfo">
+                      <article id="api-Job-jobInfo-0" data-group="User" data-name="jobInfo" data-version="0">
+                        <div class="pull-left">
+                          <h1>jobInfo</h1>
+                          <p></p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/job/info</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Job-jobInfo-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Job-jobInfo-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Job-jobInfo-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Job-jobInfo-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Job-jobInfo-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Job-jobInfo-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Job-jobInfo-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Job-jobInfo-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Job-jobInfo-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Job-jobInfo-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Job-jobInfo-0-python">Python</a></li>
+                          <li class=""><a href="#examples-Job-jobInfo-0-rust">Rust</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Job-jobInfo-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET \
+ \
+ -H "Accept: application/json" \
+ "https://api.cielo24.com/api/job/info?v=56&job_id=0fbd6015910e42dca25a863c4925d77c"
+</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Job-jobInfo-0-java">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
+import org.openapitools.client.auth.*;
+import org.openapitools.client.model.*;
+import org.openapitools.client.api.JobApi;
+
+import java.io.File;
+import java.util.*;
+
+public class JobApiExample {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure API key authorization: ApiKeyAuth
+        ApiKeyAuth ApiKeyAuth = (ApiKeyAuth) defaultClient.getAuthentication("ApiKeyAuth");
+        ApiKeyAuth.setApiKey("YOUR API KEY");
+        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+        //ApiKeyAuth.setApiKeyPrefix("Token");
+
+        // Create an instance of the API class
+        JobApi apiInstance = new JobApi();
+        Integer v = 56; // Integer | 
+        String jobId = 0fbd6015910e42dca25a863c4925d77c; // String | 
+
+        try {
+            JobInfoResponse result = apiInstance.jobInfo(v, jobId);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling JobApi#jobInfo");
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Job-jobInfo-0-android">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.api.JobApi;
+
+public class JobApiExample {
+    public static void main(String[] args) {
+        JobApi apiInstance = new JobApi();
+        Integer v = 56; // Integer | 
+        String jobId = 0fbd6015910e42dca25a863c4925d77c; // String | 
+
+        try {
+            JobInfoResponse result = apiInstance.jobInfo(v, jobId);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling JobApi#jobInfo");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Job-jobInfo-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Job-jobInfo-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure API key authorization: (authentication scheme: ApiKeyAuth)
+[apiConfig setApiKey:@"YOUR_API_KEY" forApiKeyIdentifier:@"api_token"];
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+//[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"api_token"];
+
+
+// Create an instance of the API class
+JobApi *apiInstance = [[JobApi alloc] init];
+Integer *v = 56; //  (default to 1)
+String *jobId = 0fbd6015910e42dca25a863c4925d77c; //  (default to null)
+
+[apiInstance jobInfoWith:v
+    jobId:jobId
+              completionHandler: ^(JobInfoResponse output, NSError* error) {
+    if (output) {
+        NSLog(@"%@", output);
+    }
+    if (error) {
+        NSLog(@"Error: %@", error);
+    }
+}];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-jobInfo-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var Cielo24 = require('cielo24');
+var defaultClient = Cielo24.ApiClient.instance;
+
+// Configure API key authorization: ApiKeyAuth
+var ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
+ApiKeyAuth.apiKey = "YOUR API KEY";
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//ApiKeyAuth.apiKeyPrefix['api_token'] = "Token";
+
+// Create an instance of the API class
+var api = new Cielo24.JobApi()
+var v = 56; // {Integer} 
+var jobId = 0fbd6015910e42dca25a863c4925d77c; // {String} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.jobInfo(v, jobId, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Job-jobInfo-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Job-jobInfo-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using cielo24.Api;
+using cielo24.Client;
+using cielo24.Model;
+
+namespace Example
+{
+    public class jobInfoExample
+    {
+        public void main()
+        {
+            // Configure API key authorization: ApiKeyAuth
+            Configuration.Default.ApiKey.Add("api_token", "YOUR_API_KEY");
+            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+            // Configuration.Default.ApiKeyPrefix.Add("api_token", "Bearer");
+
+            // Create an instance of the API class
+            var apiInstance = new JobApi();
+            var v = 56;  // Integer |  (default to 1)
+            var jobId = 0fbd6015910e42dca25a863c4925d77c;  // String |  (default to null)
+
+            try {
+                JobInfoResponse result = apiInstance.jobInfo(v, jobId);
+                Debug.WriteLine(result);
+            } catch (Exception e) {
+                Debug.Print("Exception when calling JobApi.jobInfo: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-jobInfo-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: ApiKeyAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setApiKey('api_token', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// OpenAPITools\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('api_token', 'Bearer');
+
+// Create an instance of the API class
+$api_instance = new OpenAPITools\Client\Api\JobApi();
+$v = 56; // Integer | 
+$jobId = 0fbd6015910e42dca25a863c4925d77c; // String | 
+
+try {
+    $result = $api_instance->jobInfo($v, $jobId);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling JobApi->jobInfo: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-jobInfo-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::OPenAPIClient::Configuration;
+use WWW::OPenAPIClient::JobApi;
+
+# Configure API key authorization: ApiKeyAuth
+$WWW::OPenAPIClient::Configuration::api_key->{'api_token'} = 'YOUR_API_KEY';
+# uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+#$WWW::OPenAPIClient::Configuration::api_key_prefix->{'api_token'} = "Bearer";
+
+# Create an instance of the API class
+my $api_instance = WWW::OPenAPIClient::JobApi->new();
+my $v = 56; # Integer | 
+my $jobId = 0fbd6015910e42dca25a863c4925d77c; # String | 
+
+eval {
+    my $result = $api_instance->jobInfo(v => $v, jobId => $jobId);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling JobApi->jobInfo: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-jobInfo-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import openapi_client
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Configure API key authorization: ApiKeyAuth
+openapi_client.configuration.api_key['api_token'] = 'YOUR_API_KEY'
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# openapi_client.configuration.api_key_prefix['api_token'] = 'Bearer'
+
+# Create an instance of the API class
+api_instance = openapi_client.JobApi()
+v = 56 # Integer |  (default to 1)
+jobId = 0fbd6015910e42dca25a863c4925d77c # String |  (default to null)
+
+try:
+    api_response = api_instance.job_info(v, jobId)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling JobApi->jobInfo: %s\n" % e)</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Job-jobInfo-0-rust">
+                              <pre class="prettyprint"><code class="language-rust">extern crate JobApi;
+
+pub fn main() {
+    let v = 56; // Integer
+    let jobId = 0fbd6015910e42dca25a863c4925d77c; // String
+
+    let mut context = JobApi::Context::default();
+    let result = client.jobInfo(v, jobId, &context).wait();
+
+    println!("{:?}", result);
+}
+</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Scopes</h2>
+                          <table>
+                            
+                          </table>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">v*</td>
+<td>
+
+
+    <div id="d2e199_jobInfo_v">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">job_id*</td>
+<td>
+
+
+    <div id="d2e199_jobInfo_jobId">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    String
+                </span>
+
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3 id="examples-Job-jobInfo-title-200"></h3>
+                            <p id="examples-Job-jobInfo-description-200" class="marked"></p>
+                            <script>
+                              var responseJob200_description = `Success`;
+                              var responseJob200_description_break = responseJob200_description.indexOf('\n');
+                              if (responseJob200_description_break == -1) {
+                                $("#examples-Job-jobInfo-title-200").text("Status: 200 - " + responseJob200_description);
+                              } else {
+                                $("#examples-Job-jobInfo-title-200").text("Status: 200 - " + responseJob200_description.substring(0, responseJob200_description_break));
+                                $("#examples-Job-jobInfo-description-200").html(responseJob200_description.substring(responseJob200_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Job-jobInfo-200" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Job-jobInfo-200-schema">Schema</a>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Job-jobInfo-200-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Job-jobInfo-200-schema">
+                                  <div id="responses-Job-jobInfo-schema-200" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Success",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/JobInfoResponse"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Job-jobInfo-200-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Job-jobInfo-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Job-jobInfo-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+                            <h3 id="examples-Job-jobInfo-title-400"></h3>
+                            <p id="examples-Job-jobInfo-description-400" class="marked"></p>
+                            <script>
+                              var responseJob400_description = `An error occurred`;
+                              var responseJob400_description_break = responseJob400_description.indexOf('\n');
+                              if (responseJob400_description_break == -1) {
+                                $("#examples-Job-jobInfo-title-400").text("Status: 400 - " + responseJob400_description);
+                              } else {
+                                $("#examples-Job-jobInfo-title-400").text("Status: 400 - " + responseJob400_description.substring(0, responseJob400_description_break));
+                                $("#examples-Job-jobInfo-description-400").html(responseJob400_description.substring(responseJob400_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Job-jobInfo-400" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Job-jobInfo-400-schema">Schema</a>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Job-jobInfo-400-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Job-jobInfo-400-schema">
+                                  <div id="responses-Job-jobInfo-schema-400" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "An error occurred",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/ErrorResponse"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Job-jobInfo-400-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Job-jobInfo-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Job-jobInfo-400-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
                         </article>

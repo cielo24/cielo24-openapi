@@ -697,6 +697,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /job/info:
+    get:
+      operationId: job_info
+      tags:
+      - job
+      parameters:
+      - name: v
+        in: query
+        required: true
+        schema:
+          type: integer
+          default: 1
+      - name: job_id
+        in: query
+        required: true
+        schema:
+          type: string
+          example: 0fbd6015910e42dca25a863c4925d77c
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobInfoResponse"
+        400:
+          description: "An error occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /job/authorize:
     post:
@@ -853,6 +884,74 @@ components:
         message:
           type: string
           example: "Child Translation Created for de. Child Translation already exists for fr"
+    JobInfoResponse:
+      type: object
+      properties:
+        JobId:
+          type: string
+          example: 0fbd6015910e42dca25a863c4925d77c
+        JobName:
+          type: string
+          example: sample_job_name
+        MediaLengthSeconds:
+          type: number
+          example: 65.3
+        ExternalId:
+          type: string
+          description: "Depends on third-party integrations."
+          example: "12345"
+        Priority:
+          type: string
+          enum: [STANDARD, PRIORITY]
+          example: PRIORITY
+        Fidelity:
+          type: string
+          enum: [MECHANICAL, PREMIUM, PROFESSIONAL]
+          example: PREMIUM
+        JobStatus:
+          type: string
+          enum: [Authorizing, Pending, In Process, Complete, Media Failure, Reviewing]
+          example: In Process
+        Options:
+          $ref: "#/components/schemas/JobOptions"
+        ReturnTargets:
+          type: object
+        SourceLanguage:
+          type: string
+          description: "RFC 5646 Language Code"
+          example: en
+        TargetLanguage:
+          type: string
+          description: "RFC 5646 Language Code"
+          example: fr
+        CreationDate:
+          type: string
+          description: "ISO 8601 Date String"
+          example: "2014-07-31T12:35:52.324389"
+        StartDate:
+          type: string
+          description: "ISO 8601 Date String"
+          example: "2014-07-31T12:35:52.324389"
+        DueDate:
+          type: string
+          description: "ISO 8601 Date String"
+          example: "2014-07-31T12:35:52.324389"
+        CompletedDate:
+          type: string
+          description: "ISO 8601 Date String"
+          example: "2014-07-31T12:35:52.324389"
+        ReturnDate:
+          type: string
+          description: "ISO 8601 Date String"
+          example: "2014-07-31T12:35:52.324389"
+        AuthorizationDate:
+          type: string
+          description: "ISO 8601 Date String"
+          example: "2014-07-31T12:35:52.324389"
+        JobDifficulty:
+          type: string
+          enum: [Good, Bad, Unknown]
+          example: Good
     JobOptions:
       type: object
       properties:
@@ -873,10 +972,7 @@ components:
           description: "A JSON dictionary of key value pairs. These will be used as substitution strings when building the callback URL and custom DFXP caption header."
           example: '{"key":"value"}'
         notes:
-          type: string
           description: "Allows you to provide text that will be displayed to the transcriber when the job is processed. An HTML included will be escaped."
-          maxLength: 1000
-          default: ""
         return_iwp:
           type: array
           description: "Allows you to receive additional callbacks when interim versions of the job are completed. If you specified a callback_url, then a callback will sent for FINAL regardless of the value of this option."

@@ -8,6 +8,7 @@ All URIs are relative to *https://api.cielo24.com/api*
 | [**addMediaUrl**](JobApi.md#addMediaUrl) | **GET** /job/add_media |  |
 | [**authorizeJob**](JobApi.md#authorizeJob) | **POST** /job/authorize |  |
 | [**getCaption**](JobApi.md#getCaption) | **GET** /job/get_caption |  |
+| [**jobInfo**](JobApi.md#jobInfo) | **GET** /job/info |  |
 | [**newJob**](JobApi.md#newJob) | **POST** /job/new |  |
 | [**performTranscription**](JobApi.md#performTranscription) | **POST** /job/perform_transcription |  |
 | [**performTranslation**](JobApi.md#performTranslation) | **POST** /job/perform_translation |  |
@@ -170,6 +171,32 @@ null (empty response body)
 
 - **Content-Type**: Not defined
 - **Accept**: text/plain, application/json
+
+<a name="jobInfo"></a>
+# **jobInfo**
+> JobInfoResponse jobInfo(v, job\_id)
+
+
+
+### Parameters
+
+|Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **v** | **Integer**|  | [default to 1] |
+| **job\_id** | **String**|  | [default to null] |
+
+### Return type
+
+[**JobInfoResponse**](../Models/JobInfoResponse.md)
+
+### Authorization
+
+[ApiKeyAuth](../README.md#ApiKeyAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 <a name="newJob"></a>
 # **newJob**
