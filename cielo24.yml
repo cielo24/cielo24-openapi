@@ -270,7 +270,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /job/perform_translation:
+  /job/translate:
     post:
       operationId: perform_translation
       tags:
@@ -910,7 +910,7 @@ components:
           example: PRIORITY
         Fidelity:
           type: string
-          enum: [MECHANICAL, PREMIUM, PROFESSIONAL]
+          enum: [MECHANICAL, PREMIUM, PROFESSIONAL, HIGH]
           example: PREMIUM
         JobStatus:
           type: string
